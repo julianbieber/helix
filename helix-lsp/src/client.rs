@@ -196,6 +196,7 @@ impl Client {
         let cmd = helix_stdx::env::which(cmd)?;
 
         let process = Command::new(cmd)
+            .current_dir(std::env::current_dir().unwrap())
             .envs(server_environment)
             .args(args)
             .stdin(Stdio::piped())
