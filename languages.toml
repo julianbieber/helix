@@ -90,7 +90,7 @@ markdoc-ls = { command = "markdoc-ls", args = ["--stdio"] }
 markdown-oxide = { command = "markdown-oxide" }
 marksman = { command = "marksman", args = ["server"] }
 mesonlsp = { command = "mesonlsp", args = ["--lsp"] }
-metals = { command = "run-metals", config = { "isHttpEnabled" = true, metals = { inlayHints = { typeParameters = {enable = true} , hintsInPatternMatch = {enable = true} }  } } }
+metals = { command = "run-metals.sh", config = { "isHttpEnabled" = true, metals = { inlayHints = { typeParameters = {enable = true} , hintsInPatternMatch = {enable = true} }, javaHome= "/home/jbieber/.local/share/mise/installs/java/temurin-8.0.452+9/bin/java", sbtScript = "run-sbt.sh"  } } }
 mint = { command = "mint", args = ["tool", "ls"] }
 mojo-lsp-server = { command = "pixi", args = ["run", "mojo-lsp-server"] }
 neocmakelsp = { command = "neocmakelsp", args = ["stdio"] }
@@ -114,7 +114,6 @@ pkl-lsp = { command = "pkl-lsp" }
 pony-lsp = { command = "pony-lsp", args = ["--stdio"], config = {defines = [], ponypath = []}}
 prisma-language-server = { command = "prisma-language-server", args = ["--stdio"], config.prisma.enableDiagnostics = true }
 purescript-language-server = { command = "purescript-language-server", args = ["--stdio"] }
-pylsp = { command = "pylsp" }
 pyrefly = { command = "pyrefly", args = ["lsp"] }
 pylsp = { command = "pylsp", args = ["-v", "--log-file", "pylsp.log"] }
 pyright = { command = "pyright-langserver", args = ["--stdio"], config = {} }
@@ -134,6 +133,7 @@ robotframework_ls = { command = "robotframework_ls" }
 ron-lsp = { command = "ron-lsp" }
 roslyn-language-server = { command = "roslyn-language-server", args = ["--stdio", "--autoLoadProjects"] }
 ruff = { command = "ruff", args = ["server"] }
+zk = { command = "zk", args = ["lsp"] }
 ruby-lsp = { command = "ruby-lsp" }
 rshtml-analyzer = { command = "rshtml-analyzer", args = ["--stdio"] }
 rumdl = { command = "rumdl", args = ["server"] }
@@ -2113,7 +2113,7 @@ scope = "source.md"
 injection-regex = "md|markdown"
 file-types = ["md", "livemd", "markdown", "mdx", "mkd", "mkdn", "mdwn", "mdown", "markdn", "mdtxt", "mdtext", "workbook", { glob = "PULLREQ_EDITMSG" }]
 roots = [".marksman.toml"]
-language-servers = [ "marksman", "markdown-oxide", "rumdl", "latex_ls", "scls" ]
+language-servers = ["marksman", "markdown-oxide", "rumdl", "latex_ls", "scls", "zk" ]
 indent = { tab-width = 2, unit = "  " }
 block-comment-tokens = { start = "<!--", end = "-->" }
 word-completion.trigger-length = 4
@@ -2188,7 +2188,7 @@ file-types = ["scala", "sbt", "sc"]
 comment-token = "//"
 block-comment-tokens = { start = "/*", end = "*/" }
 indent = { tab-width = 2, unit = "  " }
-language-servers = [ "metals" ]
+language-servers = [ "metals", "scls"]
 
 [[grammar]]
 name = "scala"
