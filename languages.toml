@@ -68,6 +68,9 @@ haskell-language-server = { command = "haskell-language-server-wrapper", args = 
 hdls = { command = "hdls" }
 hyprls = { command = "hyprls" }
 hyuga = { command = "hyuga" }
+glslls = { command = "glsl_analyzer", args = [] }
+glslls-symbols = { command = "glsl_lsp", args = [] }
+path-relative = { command = "path_lsp", args = [] }
 idris2-lsp = { command = "idris2-lsp" }
 intelephense = { command = "intelephense", args = ["--stdio"] }
 jdtls = { command = "jdtls" }
@@ -86,8 +89,8 @@ ltex-ls-plus = { command = "ltex-ls-plus" }
 markdoc-ls = { command = "markdoc-ls", args = ["--stdio"] }
 markdown-oxide = { command = "markdown-oxide" }
 marksman = { command = "marksman", args = ["server"] }
-metals = { command = "metals", config = { "isHttpEnabled" = true, metals = { inlayHints = { typeParameters = {enable = true} , hintsInPatternMatch = {enable = true} }  } } }
 mesonlsp = { command = "mesonlsp", args = ["--lsp"] }
+metals = { command = "run-metals", config = { "isHttpEnabled" = true, metals = { inlayHints = { typeParameters = {enable = true} , hintsInPatternMatch = {enable = true} }  } } }
 mint = { command = "mint", args = ["tool", "ls"] }
 mojo-lsp-server = { command = "pixi", args = ["run", "mojo-lsp-server"] }
 neocmakelsp = { command = "neocmakelsp", args = ["stdio"] }
@@ -113,6 +116,7 @@ prisma-language-server = { command = "prisma-language-server", args = ["--stdio"
 purescript-language-server = { command = "purescript-language-server", args = ["--stdio"] }
 pylsp = { command = "pylsp" }
 pyrefly = { command = "pyrefly", args = ["lsp"] }
+pylsp = { command = "pylsp", args = ["-v", "--log-file", "pylsp.log"] }
 pyright = { command = "pyright-langserver", args = ["--stdio"], config = {} }
 protols = { command = "protols", args = [] }
 basedpyright = { command = "basedpyright-langserver", args = ["--stdio"], config = {} }
@@ -179,6 +183,8 @@ helm_ls = { command = "helm_ls", args = ["serve"] }
 ember-language-server = { command = "ember-language-server", args = ["--stdio"] }
 teal-language-server = { command = "teal-language-server" }
 wasm-language-tools = { command = "wat_server" }
+latex_ls = { command = "/home/jbieber/.ltex-ls/bin/ltex-ls" }
+gpt = { command = "helix-gpt", args = ["--handler", "copilot"] }
 sourcepawn-studio = { command = "sourcepawn-studio" }
 luau = { command = "luau-lsp", args = ["lsp"] }
 ebnfer = { command = "ebnfer" }
@@ -238,6 +244,8 @@ inlayHints.closureReturnTypeHints.enable = "with_block"
 inlayHints.discriminantHints.enable = "fieldless"
 inlayHints.lifetimeElisionHints.enable = "skip_trivial"
 inlayHints.typeHints.hideClosureInitialization = false
+workspace.symbol.search.limit = 256
+workspace.symbol.search.kind = "all_symbols"
 
 [language-server.rust-analyzer.config.files]
 watcher = "server"
@@ -322,6 +330,23 @@ args = ["server", "--stdio"]
 [language-server.drools-lsp]
 command = "drools-lsp"
 
+
+[language-server.scls]
+command = "simple-completion-language-server"
+
+# write logs to /tmp/completion.log
+[language-server.scls.environment]
+RUST_LOG = "info,simple-completion-language-server=info"
+LOG_FILE = "/tmp/completion.log"
+
+[language-server.scls.config]
+max_completion_items = 30     # set max completion results len for each group: words, snippets, unicode-input
+snippets_first = true         # completions will return before snippets by default
+feature_words = true          # enable completion by word
+feature_snippets = true       # enable snippets
+feature_unicode_input = true  # enable "unicode input"
+feature_paths = true          # enable path completion
+
 [[language]]
 name = "rust"
 scope = "source.rust"
@@ -336,7 +361,7 @@ block-comment-tokens = [
   { start = "/**", end = "*/" },
   { start = "/*!", end = "*/" },
 ]
-language-servers = [ "rust-analyzer" ]
+language-servers = [ "rust-analyzer"  ]
 indent = { tab-width = 4, unit = "    " }
 persistent-diagnostic-sources = ["rustc", "clippy"]
 
@@ -346,6 +371,7 @@ persistent-diagnostic-sources = ["rustc", "clippy"]
 '[' = ']'
 '"' = '"'
 '`' = '`'
+'<' = '>'
 
 [language.debugger]
 name = "lldb-dap"
@@ -1397,7 +1423,7 @@ scope = "source.tex"
 injection-regex = "tex"
 file-types = ["tex", "dtx", "ins", "sty", "cls", "Rd", "bbx", "cbx"]
 comment-token = "%"
-language-servers = [ "texlab" ]
+language-servers = [ "texlab", "scls" ]
 indent = { tab-width = 4, unit = "\t" }
 
 [[grammar]]
@@ -1889,8 +1915,8 @@ file-types = ["glsl", "vert", "tesc", "tese", "geom", "frag", "comp" ]
 comment-token = "//"
 block-comment-tokens = { start = "/*", end = "*/" }
 indent = { tab-width = 4, unit = "    " }
-language-servers = [ "glsl_analyzer", "glsld" ]
 injection-regex = "glsl"
+language-servers = ["glslls", "glslls-symbols", "glsl_analyzer", "glsld"]
 
 [[grammar]]
 name = "glsl"
@@ -2087,7 +2113,7 @@ scope = "source.md"
 injection-regex = "md|markdown"
 file-types = ["md", "livemd", "markdown", "mdx", "mkd", "mkdn", "mdwn", "mdown", "markdn", "mdtxt", "mdtext", "workbook", { glob = "PULLREQ_EDITMSG" }]
 roots = [".marksman.toml"]
-language-servers = [ "marksman", "markdown-oxide", "rumdl" ]
+language-servers = [ "marksman", "markdown-oxide", "rumdl", "latex_ls", "scls" ]
 indent = { tab-width = 2, unit = "  " }
 block-comment-tokens = { start = "<!--", end = "-->" }
 word-completion.trigger-length = 4
@@ -2216,7 +2242,7 @@ indent = { tab-width = 4, unit = "    " }
 rulers = [51, 73]
 text-width = 72
 grammar = "gitcommit"
-language-servers = [ "commit-lsp" ]
+language-servers = [ "commit-lsp", "scls" ]
 
 [[grammar]]
 name = "gitcommit"
@@ -4848,6 +4874,16 @@ scope = "source.csv"
 [[grammar]]
 name = "csv"
 source = { git = "https://github.com/weartist/rainbow-csv-tree-sitter", rev = "d3dbf916446131417e4c2ea9eb8591b23b466d27" }
+
+
+[[language]]
+name = "stub"
+scope = "text.stub"
+file-types = []
+shebangs = []
+roots = []
+auto-format = false
+language-servers = [ "scls" ]
 
 [[language]]
 name = "yara"
