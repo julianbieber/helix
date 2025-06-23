@@ -16,6 +16,8 @@ use helix_core::{
     syntax::config::{LanguageServerFeature, RootMarkers},
     ChangeSet, Rope,
 };
+use futures_util::FutureExt;
+use helix_core::{find_workspace, syntax::config::LanguageServerFeature, ChangeSet, Rope};
 use helix_loader::VERSION_AND_GIT_HASH;
 use helix_stdx::path;
 use parking_lot::Mutex;
@@ -1193,7 +1195,14 @@ impl Client {
         &self,
         completion_item: &lsp::CompletionItem,
     ) -> impl Future<Output = Result<lsp::CompletionItem>> {
+        let n = self.name.to_string();
         self.call_with_ref::<lsp::request::ResolveCompletionItem>(completion_item)
+            .map(|c| {
+                c.map(|mut c| {
+                    c.source_lsp = Some(n);
+                    c
+                })
+            })
     }
 
     pub fn resolve_code_action(
