@@ -44,6 +44,12 @@ impl menu::Item for CompletionItem {
             CompletionItem::Lsp(LspCompletionItem { item, .. }) => item.label.as_str(),
             CompletionItem::Other(core::CompletionItem { label, .. }) => label,
         };
+        let src = if let CompletionItem::Lsp(option) = self {
+            option.item.source_lsp.clone().unwrap_or("1".to_string())
+        } else {
+            "2".to_string()
+        };
+        let label = format!("{label}({src})");
 
         let kind = match self {
             CompletionItem::Lsp(LspCompletionItem { item, .. }) => match item.kind {

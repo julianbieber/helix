@@ -298,6 +298,7 @@ fn request_completions_from_language_server(
     savepoint: Arc<SavePoint>,
 ) -> impl Future<Output = CompletionResponse> {
     let provider = ls.id();
+    let name = ls.name().to_string();
     let offset_encoding = ls.offset_encoding();
     let text = doc.text();
     let cursor = doc.selection(view).primary().cursor(text.slice(..));
@@ -326,6 +327,9 @@ fn request_completions_from_language_server(
             let sort_text2 = item2.sort_text.as_deref().unwrap_or(&item2.label);
             sort_text1.cmp(sort_text2)
         });
+        for i in items.iter_mut() {
+            i.source_lsp = Some(name.clone());
+        }
         CompletionResponse {
             items: CompletionItems::Lsp(items),
             context: ResponseContext {

@@ -90,7 +90,7 @@ markdoc-ls = { command = "markdoc-ls", args = ["--stdio"] }
 markdown-oxide = { command = "markdown-oxide" }
 marksman = { command = "marksman", args = ["server"] }
 mesonlsp = { command = "mesonlsp", args = ["--lsp"] }
-metals = { command = "run-metals.sh", config = { "isHttpEnabled" = true, metals = { inlayHints = { typeParameters = {enable = true} , hintsInPatternMatch = {enable = true} }, javaHome= "/home/jbieber/.local/share/mise/installs/java/temurin-8.0.452+9/bin/java", sbtScript = "run-sbt.sh"  } } }
+metals = { command = "run-metals.sh", config = { "isHttpEnabled" = true, metals = { inlayHints = { typeParameters = {enable = true} , hintsInPatternMatch = {enable = true} }, javaHome= "/home/jbieber/.local/share/mise/installs/java/temurin-8.0.452+9", sbtScript = "run-sbt.sh"  } } }
 mint = { command = "mint", args = ["tool", "ls"] }
 mojo-lsp-server = { command = "pixi", args = ["run", "mojo-lsp-server"] }
 neocmakelsp = { command = "neocmakelsp", args = ["stdio"] }

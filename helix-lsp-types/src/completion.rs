@@ -538,6 +538,7 @@ pub struct CompletionItem {
     /// Tags for this completion item.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<CompletionItemTag>>,
+    pub source_lsp: Option<String>,
 }
 
 impl CompletionItem {
