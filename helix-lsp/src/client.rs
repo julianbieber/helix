@@ -11,13 +11,12 @@ use crate::lsp::{
     DidChangeWorkspaceFoldersParams, OneOf, PositionEncodingKind, SignatureHelp, Url,
     WorkspaceFolder, WorkspaceFoldersChangeEvent,
 };
+use futures_util::FutureExt;
 use helix_core::{
     find_workspace,
     syntax::config::{LanguageServerFeature, RootMarkers},
     ChangeSet, Rope,
 };
-use futures_util::FutureExt;
-use helix_core::{find_workspace, syntax::config::LanguageServerFeature, ChangeSet, Rope};
 use helix_loader::VERSION_AND_GIT_HASH;
 use helix_stdx::path;
 use parking_lot::Mutex;
