@@ -5,6 +5,7 @@ use-grammars = { except = [ "wren", "gemini" ] }
 
 [language-server]
 
+claude-lsp = { command = "claude-lsp" }
 ada-gpr-language-server = {command = "ada_language_server", args = ["--language-gpr"]}
 ada-language-server = { command = "ada_language_server" }
 als = { command = "als" }
@@ -361,7 +362,7 @@ block-comment-tokens = [
   { start = "/**", end = "*/" },
   { start = "/*!", end = "*/" },
 ]
-language-servers = [ "rust-analyzer"  ]
+language-servers = [ "rust-analyzer", "claude-lsp" ]
 indent = { tab-width = 4, unit = "    " }
 persistent-diagnostic-sources = ["rustc", "clippy"]
 
@@ -1007,7 +1008,7 @@ shebangs = ["node"]
 roots = [ "package.json", "jsconfig.json" ]
 comment-token = "//"
 block-comment-tokens = { start = "/*", end = "*/" }
-language-servers = [ "typescript-language-server" ]
+language-servers = [ "typescript-language-server", "claude-lsp" ]
 indent = { tab-width = 2, unit = "  " }
 
 [language.debugger]
@@ -1050,7 +1051,7 @@ shebangs = ["deno", "bun", "ts-node"]
 roots = [ "package.json", "tsconfig.json" ]
 comment-token = "//"
 block-comment-tokens = { start = "/*", end = "*/" }
-language-servers = [ "typescript-language-server" ]
+language-servers = [ "typescript-language-server", "claude-lsp" ]
 indent = { tab-width = 2, unit = "  " }
 
 [[grammar]]
@@ -1182,7 +1183,7 @@ file-types = ["py", "pyi", "py3", "pyw", "ptl", "rpy", "cpy", "ipy", "pyt", { gl
 shebangs = ["python", "uv"]
 roots = ["pyproject.toml", "setup.py", "poetry.lock", "pyrightconfig.json"]
 comment-token = "#"
-language-servers = ["ty", "ruff", "jedi", "pylsp", "zuban"]
+language-servers = ["ty", "ruff", "jedi", "pylsp", "claude-lsp"]
 # TODO: pyls needs utf-8 offsets
 indent = { tab-width = 4, unit = "    " }
 
@@ -2188,7 +2189,7 @@ file-types = ["scala", "sbt", "sc"]
 comment-token = "//"
 block-comment-tokens = { start = "/*", end = "*/" }
 indent = { tab-width = 2, unit = "  " }
-language-servers = [ "metals", "scls"]
+language-servers = [ "metals", "scls", "claude-lsp"]
 
 [[grammar]]
 name = "scala"

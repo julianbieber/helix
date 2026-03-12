@@ -256,22 +256,11 @@ pub fn merge_toml_values(left: toml::Value, right: toml::Value, merge_depth: usi
 /// Otherwise (workspace, false) is returned
 pub fn find_workspace() -> (PathBuf, bool) {
     let current_dir = current_working_dir();
-    find_workspace_in(current_dir)
+    (current_dir, true)
 }
 
 pub fn find_workspace_in(dir: impl AsRef<Path>) -> (PathBuf, bool) {
-    let dir = dir.as_ref();
-    for ancestor in dir.ancestors() {
-        if ancestor.join(".git").exists()
-            || ancestor.join(".svn").exists()
-            || ancestor.join(".jj").exists()
-            || ancestor.join(".helix").exists()
-        {
-            return (ancestor.to_owned(), false);
-        }
-    }
-
-    (dir.to_owned(), true)
+    (dir.as_ref().to_owned(), true)
 }
 
 fn default_config_file() -> PathBuf {
