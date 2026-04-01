@@ -27,6 +27,22 @@ fn get_repo_dir(file: &Path) -> Result<&Path> {
     file.parent().context("file has no parent directory")
 }
 
+/// Try to find the commit for origin/master or origin/main, falling back to HEAD.
+fn resolve_diff_base_commit(repo: &Repository) -> Result<Commit<'_>> {
+    for refname in ["refs/remotes/origin/master", "refs/remotes/origin/main"] {
+        if let Ok(reference) = repo.find_reference(refname) {
+            if let Ok(id) = reference.into_fully_peeled_id() {
+                if let Ok(object) = id.object() {
+                    if let Ok(commit) = object.try_into_commit() {
+                        return Ok(commit);
+                    }
+                }
+            }
+        }
+    }
+    Ok(repo.head_commit()?)
+}
+
 pub fn get_diff_base(file: &Path, trust_full: bool) -> Result<Vec<u8>> {
     debug_assert!(!file.exists() || file.is_file());
     debug_assert!(file.is_absolute());
@@ -38,7 +54,7 @@ pub fn get_diff_base(file: &Path, trust_full: bool) -> Result<Vec<u8>> {
     let repo = open_repo(repo_dir, trust_full)
         .context("failed to open git repo")?
         .to_thread_local();
-    let head = repo.head_commit()?;
+    let head = resolve_diff_base_commit(&repo)?;
     let file_oid = find_file_in_commit(&repo, &head, &file)?;
 
     let file_object = repo.find_object(file_oid)?;
@@ -90,7 +106,58 @@ pub fn for_each_changed_file(
     trust_full: bool,
     f: impl Fn(Result<FileChange>) -> bool,
 ) -> Result<()> {
-    status(&open_repo(cwd, trust_full)?.to_thread_local(), f)
+    let repo = open_repo(cwd, trust_full)?.to_thread_local();
+    let work_dir = repo
+        .workdir()
+        .ok_or_else(|| anyhow::anyhow!("working tree not found"))?
+        .to_path_buf();
+
+    let base_commit = resolve_diff_base_commit(&repo)?;
+    let head_commit = repo.head_commit()?;
+
+    // Collect paths changed between base and HEAD via tree diff
+    let mut seen = std::collections::HashSet::new();
+    let base_tree = base_commit.tree()?;
+    let head_tree = head_commit.tree()?;
+
+    let _ = base_tree
+        .changes()?
+        .for_each_to_obtain_tree(&head_tree, |change| {
+            use gix::object::tree::diff::Change;
+            let location = change.location().to_owned();
+            let path = work_dir.join(location.to_path_lossy().as_ref());
+            let file_change = match &change {
+                Change::Addition { .. } => FileChange::Untracked { path: path.clone() },
+                Change::Deletion { .. } => FileChange::Deleted { path: path.clone() },
+                Change::Modification { .. } => FileChange::Modified { path: path.clone() },
+                Change::Rewrite {
+                    source_location, ..
+                } => FileChange::Renamed {
+                    from_path: work_dir.join(source_location.to_path_lossy().as_ref()),
+                    to_path: path.clone(),
+                },
+            };
+            seen.insert(path);
+            if f(Ok(file_change)) {
+                Ok::<_, std::convert::Infallible>(std::ops::ControlFlow::Continue(()))
+            } else {
+                Ok::<_, std::convert::Infallible>(std::ops::ControlFlow::Break(()))
+            }
+        })?;
+
+    // Also include uncommitted/untracked changes not already covered
+    status(&repo, |result| match result {
+        Ok(change) => {
+            if !seen.contains(change.path()) {
+                f(Ok(change))
+            } else {
+                true
+            }
+        }
+        Err(err) => f(Err(err)),
+    })?;
+
+    Ok(())
 }
 
 fn open_repo(path: &Path, trust_full: bool) -> Result<ThreadSafeRepository> {
