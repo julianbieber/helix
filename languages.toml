@@ -201,6 +201,12 @@ ebnfer = { command = "ebnfer" }
 zizmor = { command = "zizmor", args = ["--lsp"]}
 godot = { command = "ncat", args = ["127.0.0.1", "6005"] }
 
+[language-server.static-completions]
+command = "static_completions_lsp"
+
+[language-server.bevy-asset-lsp]
+command = "bevy_asset_lsp"
+
 [language-server.actions-language-server]
 command = "actions-languageserver"
 args = ["--stdio"]
@@ -377,7 +383,7 @@ block-comment-tokens = [
   { start = "/**", end = "*/" },
   { start = "/*!", end = "*/" },
 ]
-language-servers = [ "rust-analyzer", "claude-lsp" ]
+language-servers = [ "rust-analyzer", "claude-lsp", "bevy-asset-lsp" ]
 indent = { tab-width = 4, unit = "    " }
 persistent-diagnostic-sources = ["rustc", "clippy"]
 
@@ -2134,7 +2140,7 @@ scope = "source.md"
 injection-regex = "md|markdown"
 file-types = ["md", "livemd", "markdown", "mdx", "mkd", "mkdn", "mdwn", "mdown", "markdn", "mdtxt", "mdtext", "workbook", { glob = "PULLREQ_EDITMSG" }]
 roots = [".marksman.toml"]
-language-servers = ["marksman", "markdown-oxide", "rumdl", "latex_ls", "scls", "zk", "claude-lsp" ]
+language-servers = ["marksman", "markdown-oxide", "rumdl", "latex_ls", "scls", "zk", "claude-lsp", "static-completions" ]
 indent = { tab-width = 2, unit = "  " }
 block-comment-tokens = { start = "<!--", end = "-->" }
 word-completion.trigger-length = 4
