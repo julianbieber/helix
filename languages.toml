@@ -6,6 +6,7 @@ use-grammars = { except = [ "wren", "gemini" ] }
 [language-server]
 
 claude-lsp = { command = "claude-lsp" }
+treesitter-class-lsp = { command = "treesitter-class-lsp" }
 ada-gpr-language-server = {command = "ada_language_server", args = ["--language-gpr"]}
 ada-language-server = { command = "ada_language_server" }
 als = { command = "als" }
@@ -2120,7 +2121,7 @@ scope = "source.md"
 injection-regex = "md|markdown"
 file-types = ["md", "livemd", "markdown", "mdx", "mkd", "mkdn", "mdwn", "mdown", "markdn", "mdtxt", "mdtext", "workbook", { glob = "PULLREQ_EDITMSG" }]
 roots = [".marksman.toml"]
-language-servers = ["marksman", "markdown-oxide", "rumdl", "latex_ls", "scls", "zk", "claude-lsp", "static-completions" ]
+language-servers = ["marksman", "markdown-oxide", "rumdl", "latex_ls", "scls", "zk", "claude-lsp", "static-completions", "treesitter-class-lsp" ]
 indent = { tab-width = 2, unit = "  " }
 block-comment-tokens = { start = "<!--", end = "-->" }
 word-completion.trigger-length = 4
@@ -2139,6 +2140,12 @@ word-completion.trigger-length = 4
 [[grammar]]
 name = "markdown"
 source = { git = "https://github.com/tree-sitter-grammars/tree-sitter-markdown", rev = "f969cd3ae3f9fbd4e43205431d0ae286014c05b5", subpath = "tree-sitter-markdown" }
+
+[[language]]
+name = "text"
+scope = "text.plain"
+file-types = ["txt"]
+language-servers = ["treesitter-class-lsp"]
 
 [[language]]
 name = "markdown-rustdoc"
