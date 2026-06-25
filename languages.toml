@@ -384,7 +384,7 @@ block-comment-tokens = [
   { start = "/**", end = "*/" },
   { start = "/*!", end = "*/" },
 ]
-language-servers = [ "rust-analyzer", "claude-lsp", "bevy-asset-lsp" ]
+language-servers = [ "rust-analyzer", "claude-lsp", "bevy-asset-lsp", "path-relative" ]
 indent = { tab-width = 4, unit = "    " }
 persistent-diagnostic-sources = ["rustc", "clippy"]
 
@@ -463,7 +463,7 @@ file-types = [
   { glob = "staticcheck.conf" },
 ]
 comment-token = "#"
-language-servers = [ "taplo", "tombi" ]
+language-servers = [ "taplo", "tombi", "path-relative" ]
 indent = { tab-width = 2, unit = "  " }
 
 [[grammar]]
@@ -677,7 +677,7 @@ file-types = [
   "tfstate", # e.g. terraform.tfstate
   { glob = "*.tfstate.backup" }, # e.g. terraform.tfstate.backup
 ]
-language-servers = [ "vscode-json-language-server" ]
+language-servers = [ "vscode-json-language-server", "path-relative" ]
 auto-format = true
 indent = { tab-width = 2, unit = "  " }
 
@@ -700,7 +700,7 @@ file-types = [
 comment-token = "//"
 block-comment-tokens = { start = "/*", end = "*/" }
 grammar = "json"
-language-servers = [ "vscode-json-language-server" ]
+language-servers = [ "vscode-json-language-server", "path-relative" ]
 auto-format = true
 indent = { tab-width = 2, unit = "  " }
 
@@ -1034,7 +1034,7 @@ shebangs = ["node"]
 roots = [ "package.json", "jsconfig.json" ]
 comment-token = "//"
 block-comment-tokens = { start = "/*", end = "*/" }
-language-servers = [ "typescript-language-server", "claude-lsp" ]
+language-servers = [ "typescript-language-server", "claude-lsp", "path-relative" ]
 indent = { tab-width = 2, unit = "  " }
 
 [language.debugger]
@@ -1077,7 +1077,7 @@ shebangs = ["deno", "bun", "ts-node"]
 roots = [ "package.json", "tsconfig.json" ]
 comment-token = "//"
 block-comment-tokens = { start = "/*", end = "*/" }
-language-servers = [ "typescript-language-server", "claude-lsp" ]
+language-servers = [ "typescript-language-server", "claude-lsp", "path-relative" ]
 indent = { tab-width = 2, unit = "  " }
 
 [[grammar]]
@@ -1209,7 +1209,7 @@ file-types = ["py", "pyi", "py3", "pyw", "ptl", "rpy", "cpy", "ipy", "pyt", { gl
 shebangs = ["python", "uv"]
 roots = ["pyproject.toml", "setup.py", "poetry.lock", "pyrightconfig.json"]
 comment-token = "#"
-language-servers = ["ty", "ruff", "jedi", "pylsp", "claude-lsp"]
+language-servers = ["ty", "ruff", "jedi", "pylsp", "claude-lsp", "path-relative"]
 # TODO: pyls needs utf-8 offsets
 indent = { tab-width = 4, unit = "    " }
 
@@ -1386,7 +1386,7 @@ file-types = [
 ]
 shebangs = ["sh", "bash", "dash", "zsh"]
 comment-token = "#"
-language-servers = [ "bash-language-server" ]
+language-servers = [ "bash-language-server", "path-relative" ]
 indent = { tab-width = 2, unit = "  " }
 
 [[grammar]]
@@ -1745,7 +1745,7 @@ file-types = [
 ]
 comment-token = "#"
 indent = { tab-width = 2, unit = "  " }
-language-servers = [ "yaml-language-server", "ansible-language-server" ]
+language-servers = [ "yaml-language-server", "ansible-language-server", "path-relative" ]
 injection-regex = "yml|yaml"
 formatter = { command = "yamlfmt", args = ['-'] }
 auto-format = true
@@ -2141,7 +2141,7 @@ scope = "source.md"
 injection-regex = "md|markdown"
 file-types = ["md", "livemd", "markdown", "mdx", "mkd", "mkdn", "mdwn", "mdown", "markdn", "mdtxt", "mdtext", "workbook", { glob = "PULLREQ_EDITMSG" }]
 roots = [".marksman.toml"]
-language-servers = ["marksman", "markdown-oxide", "rumdl", "latex_ls", "scls", "zk", "claude-lsp", "static-completions", "treesitter-class-lsp" ]
+language-servers = ["marksman", "markdown-oxide", "rumdl", "latex_ls", "scls", "zk", "claude-lsp", "static-completions", "treesitter-class-lsp", "path-relative" ]
 indent = { tab-width = 2, unit = "  " }
 block-comment-tokens = { start = "<!--", end = "-->" }
 word-completion.trigger-length = 4
@@ -2165,7 +2165,7 @@ source = { git = "https://github.com/tree-sitter-grammars/tree-sitter-markdown",
 name = "text"
 scope = "text.plain"
 file-types = ["txt"]
-language-servers = ["treesitter-class-lsp"]
+language-servers = ["treesitter-class-lsp", "path-relative"]
 
 [[language]]
 name = "markdown-rustdoc"
@@ -2222,7 +2222,7 @@ file-types = ["scala", "sbt", "sc"]
 comment-token = "//"
 block-comment-tokens = { start = "/*", end = "*/" }
 indent = { tab-width = 2, unit = "  " }
-language-servers = [ "metals", "scls", "claude-lsp"]
+language-servers = [ "metals", "scls", "claude-lsp", "path-relative"]
 
 [[grammar]]
 name = "scala"
@@ -4036,7 +4036,7 @@ injection-regex = "jjconfig"
 grammar = "toml"
 file-types = [{ glob = "jj/config.toml" }, { glob = "jj/**/*.toml" }, { glob = ".jj/repo/*.toml" }]
 comment-token = "#"
-language-servers = [ "taplo", "tombi" ]
+language-servers = [ "taplo", "tombi", "path-relative" ]
 indent = { tab-width = 2, unit = "  " }
 
 [[language]]
@@ -4086,7 +4086,7 @@ file-types = [
   { glob = ".config/mise/conf.d/*.toml" },
 ]
 comment-token = "#"
-language-servers = [ "taplo", "tombi" ]
+language-servers = [ "taplo", "tombi", "path-relative" ]
 indent = { tab-width = 2, unit = "  " }
 
 [[language]]
@@ -5202,7 +5202,7 @@ injection-regex = "cross(-config)"
 grammar = "toml"
 comment-token = "#"
 file-types = [{glob = "Cross.toml"}]
-language-servers = [ "taplo", "tombi" ]
+language-servers = [ "taplo", "tombi", "path-relative" ]
 indent = { tab-width = 2, unit = "  " }
 
 [[language]]
