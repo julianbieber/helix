@@ -7,6 +7,8 @@ use-grammars = { except = [ "wren", "gemini" ] }
 
 claude-lsp = { command = "claude-lsp" }
 treesitter-class-lsp = { command = "treesitter-class-lsp" }
+mml-lsp = { command = "mml-lsp" }
+claude-skills-lsp = { command = "claude-skills-lsp" }
 ada-gpr-language-server = {command = "ada_language_server", args = ["--language-gpr"]}
 ada-language-server = { command = "ada_language_server" }
 als = { command = "als" }
@@ -2121,7 +2123,7 @@ scope = "source.md"
 injection-regex = "md|markdown"
 file-types = ["md", "livemd", "markdown", "mdx", "mkd", "mkdn", "mdwn", "mdown", "markdn", "mdtxt", "mdtext", "workbook", { glob = "PULLREQ_EDITMSG" }]
 roots = [".marksman.toml"]
-language-servers = ["marksman", "markdown-oxide", "rumdl", "latex_ls", "scls", "zk", "claude-lsp", "static-completions", "treesitter-class-lsp", "path-relative" ]
+language-servers = ["marksman", "markdown-oxide", "rumdl", "latex_ls", "scls", "zk", "claude-lsp", "static-completions", "treesitter-class-lsp", "path-relative", "claude-skills-lsp" ]
 indent = { tab-width = 2, unit = "  " }
 block-comment-tokens = { start = "<!--", end = "-->" }
 word-completion.trigger-length = 4
@@ -5560,3 +5562,16 @@ indent = { tab-width = 2, unit = "  " }
 [[grammar]]
 name = "concerto"
 source = { git = "https://github.com/accordproject/concerto-tree-sitter", rev = "920ba23ea93af56b19dfc38fcddf80b3ddc62685" }
+
+[[language]]
+name = "mml"
+scope = "source.mml"
+injection-regex = "mml"
+file-types = ["mml"]
+comment-token = "#"
+indent = { tab-width = 2, unit = "  " }
+language-servers = ["mml-lsp"]
+
+[[grammar]]
+name = "mml"
+source = { path = "/home/jbieber/projects/team-constellation-tooling/lsps/tree-sitter-mml" }
