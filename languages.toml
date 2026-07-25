@@ -5564,21 +5564,6 @@ indent = { tab-width = 2, unit = "  " }
 name = "concerto"
 source = { git = "https://github.com/accordproject/concerto-tree-sitter", rev = "920ba23ea93af56b19dfc38fcddf80b3ddc62685" }
 
-# Hobby specs get the forked server, routed by path. This entry must come BEFORE
-# the plain `mml` entry below: the hobby parser resolves spec->source against
-# ~/fun_worktrees/<project>/<topic>/<task> rather than ~/worktrees/<topic>/<task>/<repo>.
-# `grammar = "mml"` reuses the tree-sitter grammar the `mml` entry declares, so
-# there is no second grammar to build.
-[[language]]
-name = "mml-hobby"
-scope = "source.mml"
-injection-regex = "mml"
-file-types = [{ glob = "**/hobby-mimisbrunnr/notes/**/*.mml" }]
-comment-token = "#"
-indent = { tab-width = 2, unit = "  " }
-grammar = "mml"
-language-servers = ["hobby-mml-lsp"]
-
 [[language]]
 name = "mml"
 scope = "source.mml"
@@ -5591,3 +5576,17 @@ language-servers = ["mml-lsp"]
 [[grammar]]
 name = "mml"
 source = { path = "/home/jbieber/projects/team-constellation-tooling/lsps/tree-sitter-mml" }
+
+# Hobby specs are `.hmml` and get the forked server, which resolves spec->source
+# against ~/fun_worktrees/<project>/<topic>/<task> rather than the work layout
+# ~/worktrees/<topic>/<task>/<repo>. `grammar = "mml"` reuses the tree-sitter
+# grammar the `mml` entry declares, so there is no second grammar to build.
+[[language]]
+name = "hmml"
+scope = "source.hmml"
+injection-regex = "hmml"
+file-types = ["hmml"]
+comment-token = "#"
+indent = { tab-width = 2, unit = "  " }
+grammar = "mml"
+language-servers = ["hobby-mml-lsp"]
