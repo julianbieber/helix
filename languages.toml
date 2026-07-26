@@ -5573,10 +5573,6 @@ comment-token = "#"
 indent = { tab-width = 2, unit = "  " }
 language-servers = ["mml-lsp"]
 
-[[grammar]]
-name = "mml"
-source = { path = "/home/jbieber/projects/team-constellation-tooling/lsps/tree-sitter-mml" }
-
 # Hobby specs are `.hmml` and get the forked server, which resolves spec->source
 # against ~/fun_worktrees/<project>/<topic>/<task> rather than the work layout
 # ~/worktrees/<topic>/<task>/<repo>. `grammar = "mml"` reuses the tree-sitter
