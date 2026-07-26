@@ -5584,5 +5584,4 @@ injection-regex = "hmml"
 file-types = ["hmml"]
 comment-token = "#"
 indent = { tab-width = 2, unit = "  " }
-grammar = "mml"
 language-servers = ["hobby-mml-lsp"]
