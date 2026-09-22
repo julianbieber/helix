@@ -8,7 +8,9 @@ use-grammars = { except = [ "wren", "gemini" ] }
 claude-lsp = { command = "claude-lsp" }
 treesitter-class-lsp = { command = "treesitter-class-lsp" }
 mml-lsp = { command = "mml-lsp" }
+orac-lsp = { command = "orac-lsp" }
 hobby-mml-lsp = { command = "hobby-mml-lsp" }
+hobby-struct-lsp = { command = "hobby-struct-lsp" }
 claude-skills-lsp = { command = "claude-skills-lsp" }
 ada-gpr-language-server = {command = "ada_language_server", args = ["--language-gpr"]}
 ada-language-server = { command = "ada_language_server" }
@@ -1524,7 +1526,7 @@ scope = "source.java"
 injection-regex = "java"
 file-types = ["java", "jav", "pde"]
 roots = ["pom.xml", "build.gradle", "build.gradle.kts"]
-language-servers = [ "jdtls" ]
+language-servers = [ "jdtls", "treesitter-class-lsp" ]
 indent = { tab-width = 2, unit = "  " }
 comment-tokens = ["//"]
 block-comment-tokens = { start = "/*", end = "*/" }
@@ -2208,7 +2210,7 @@ file-types = ["scala", "sbt", "sc"]
 comment-token = "//"
 block-comment-tokens = { start = "/*", end = "*/" }
 indent = { tab-width = 2, unit = "  " }
-language-servers = [ "metals", "scls", "claude-lsp", "path-relative"]
+language-servers = [ "metals", "scls", "claude-lsp", "path-relative", "treesitter-class-lsp"]
 
 [[grammar]]
 name = "scala"
@@ -5588,3 +5590,28 @@ file-types = ["hmml"]
 comment-token = "#"
 indent = { tab-width = 2, unit = "  " }
 language-servers = ["hobby-mml-lsp"]
+
+# A repo's structure.hstruct — what layers it has, what each module owns, and
+# which violations of its own rules it accepts. Repo-scoped and long-lived,
+# unlike an .hmml spec, which describes one unit for one task.
+[[language]]
+name = "hstruct"
+scope = "source.hstruct"
+injection-regex = "hstruct"
+file-types = ["hstruct"]
+comment-token = "#"
+indent = { tab-width = 2, unit = "  " }
+language-servers = ["hobby-struct-lsp"]
+
+# ORA conversation transcripts. There is no tree-sitter grammar for `.orac`, so
+# no [[grammar]] entry, and `hx --health orac` reporting no highlighter is
+# expected. `file-types` claims `.orac` only: v0 transcripts are `.txt`, and
+# claiming that would start the server on every unrelated text file, so open
+# those with `:set-language orac`.
+[[language]]
+name = "orac"
+scope = "source.orac"
+file-types = ["orac"]
+comment-token = "#!"
+indent = { tab-width = 2, unit = "  " }
+language-servers = ["orac-lsp"]
