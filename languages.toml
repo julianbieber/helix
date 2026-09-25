@@ -4,6 +4,7 @@
 use-grammars = { except = [ "wren", "gemini" ] }
 
 [language-server]
+hobby-research-lsp = { command = "hobby-research-lsp" }
 
 claude-lsp = { command = "claude-lsp" }
 treesitter-class-lsp = { command = "treesitter-class-lsp" }
@@ -5615,3 +5616,12 @@ file-types = ["orac"]
 comment-token = "#!"
 indent = { tab-width = 2, unit = "  " }
 language-servers = ["orac-lsp"]
+
+# A research file written by `hresearch render`: an answer card, option matrix
+# or mechanism figure. Highlighting only; its snippet is injected as Rust.
+[[language]]
+name = "hresearch"
+scope = "source.hresearch"
+injection-regex = "hresearch"
+file-types = ["hresearch"]
+language-servers = ["hobby-research-lsp"]
