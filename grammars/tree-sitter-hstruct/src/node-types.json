@@ -1,0 +1,142 @@
+[
+  {
+    "type": "header_field",
+    "named": true,
+    "fields": {
+      "key": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "header_key",
+            "named": true
+          }
+        ]
+      },
+      "value": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "value",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "source_file",
+    "named": true,
+    "root": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "comment",
+          "named": true
+        },
+        {
+          "type": "header_field",
+          "named": true
+        },
+        {
+          "type": "prose",
+          "named": true
+        },
+        {
+          "type": "standard_header",
+          "named": true
+        },
+        {
+          "type": "verification",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "standard_header",
+    "named": true,
+    "fields": {
+      "name": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "standard_name",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "section_marker",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "standard_name",
+    "named": true,
+    "fields": {}
+  },
+  {
+    "type": "value",
+    "named": true,
+    "fields": {}
+  },
+  {
+    "type": "verification",
+    "named": true,
+    "fields": {
+      "key": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "verification_key",
+            "named": true
+          }
+        ]
+      },
+      "value": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "value",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "comment",
+    "named": true
+  },
+  {
+    "type": "header_key",
+    "named": true
+  },
+  {
+    "type": "prose",
+    "named": true
+  },
+  {
+    "type": "section_marker",
+    "named": true
+  },
+  {
+    "type": "verification_key",
+    "named": true
+  }
+]

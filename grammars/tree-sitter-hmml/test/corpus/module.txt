@@ -1,0 +1,77 @@
+==================
+api section with functions and methods
+==================
+
+## api
+fn entry_for(index: u32, limit: u32) -> Option<WaveEntry> @ src/waves/table.rs:31
+  - look the index up
+  - draw a jitter @ spec wave-rng::next_u32
+fn WaveEntry::offsets(rng: WaveRng) -> Vec<Vec2>
+  - lay the slots out
+
+---
+
+(source_file
+  (section_header
+    (section_marker)
+    (section_name))
+  (api_entry
+    (identifier)
+    (param
+      (identifier)
+      (type
+        (identifier)))
+    (param
+      (identifier)
+      (type
+        (identifier)))
+    (type
+      (identifier)
+      (type
+        (identifier)))
+    (path))
+  (bullet
+    (prose))
+  (bullet
+    (prose)
+    (spec_annotation
+      (spec_keyword)
+      (spec_ref)))
+  (api_entry
+    (identifier)
+    (identifier)
+    (param
+      (identifier)
+      (type
+        (identifier)))
+    (type
+      (identifier)
+      (type
+        (identifier))))
+  (bullet
+    (prose)))
+
+==================
+member spec ref on a behavior step
+==================
+
+## behavior
+- look the wave up @ spec wave-table::entry_for
+- place the spawns @ spec wave-table::WaveEntry::offsets
+
+---
+
+(source_file
+  (section_header
+    (section_marker)
+    (section_name))
+  (bullet
+    (prose)
+    (spec_annotation
+      (spec_keyword)
+      (spec_ref)))
+  (bullet
+    (prose)
+    (spec_annotation
+      (spec_keyword)
+      (spec_ref))))

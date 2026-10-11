@@ -375,7 +375,7 @@ block-comment-tokens = [
   { start = "/**", end = "*/" },
   { start = "/*!", end = "*/" },
 ]
-language-servers = [ "rust-analyzer", "claude-lsp", "bevy-asset-lsp", "path-relative" ]
+language-servers = [ "rust-analyzer", "claude-lsp", "bevy-asset-lsp", "path-relative", { name = "hobby-research-lsp", only-features = ["workspace-symbols"] } ]
 indent = { tab-width = 4, unit = "    " }
 persistent-diagnostic-sources = ["rustc", "clippy"]
 
@@ -2130,7 +2130,7 @@ scope = "source.md"
 injection-regex = "md|markdown"
 file-types = ["md", "livemd", "markdown", "mdx", "mkd", "mkdn", "mdwn", "mdown", "markdn", "mdtxt", "mdtext", "workbook", { glob = "PULLREQ_EDITMSG" }]
 roots = [".marksman.toml"]
-language-servers = ["marksman", "markdown-oxide", "rumdl", "latex_ls", "scls", "zk", "claude-lsp", "static-completions", "treesitter-class-lsp", "path-relative", "claude-skills-lsp" ]
+language-servers = ["marksman", "markdown-oxide", "rumdl", "latex_ls", "scls", "zk", "claude-lsp", "static-completions", "treesitter-class-lsp", "path-relative", "claude-skills-lsp", { name = "hobby-research-lsp", only-features = ["workspace-symbols"] } ]
 indent = { tab-width = 2, unit = "  " }
 block-comment-tokens = { start = "<!--", end = "-->" }
 word-completion.trigger-length = 4
@@ -5618,7 +5618,8 @@ indent = { tab-width = 2, unit = "  " }
 language-servers = ["orac-lsp"]
 
 # A research file written by `hresearch render`: an answer card, option matrix
-# or mechanism figure. Highlighting only; its snippet is injected as Rust.
+# or mechanism figure. Its snippet is injected as Rust; goto-definition on a
+# link or a [k] ref opens it in the browser.
 [[language]]
 name = "hresearch"
 scope = "source.hresearch"
