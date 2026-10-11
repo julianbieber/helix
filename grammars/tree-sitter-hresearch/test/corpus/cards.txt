@@ -1,0 +1,233 @@
+================================================================================
+Snippet lines, blank one included, parse as code ending before the frame
+================================================================================
+
+┌ how do I spawn?                  2026-09-24 ┐
+│ verdict  Spawn it [1]                        │
+│ snippet  fn setup(mut c: Commands) {         │
+│              // spawns one                   │
+│                                              │
+│          }                                   │
+│          ↳ https://x.rs/a#L1-L4 [1]          │
+│ breaks   "Only once."                        │
+│          — https://x.rs/a [1]                │
+│ source   [1] https://x.rs/a                  │
+└──────────────────────────────────────────────┘
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (card
+    (card_header
+      (frame)
+      (question
+        (word)
+        (word)
+        (word)
+        (word))
+      (date)
+      (frame))
+    (slot
+      (frame)
+      (label)
+      (word)
+      (word)
+      (ref)
+      (frame))
+    (snippet_slot
+      (frame)
+      (label)
+      (code)
+      (frame)
+      (code_break)
+      (frame)
+      (code)
+      (frame)
+      (code_break)
+      (frame)
+      (frame)
+      (code_break)
+      (frame)
+      (code)
+      (frame)
+      (code_break)
+      (frame)
+      (link_arrow)
+      (url)
+      (ref)
+      (frame))
+    (slot
+      (frame)
+      (label)
+      (quote)
+      (frame)
+      (frame)
+      (dash)
+      (url)
+      (ref)
+      (frame))
+    (slot
+      (frame)
+      (label)
+      (ref)
+      (url)
+      (frame))
+    (card_footer
+      (frame))))
+
+================================================================================
+An empty snippet is text, not Rust
+================================================================================
+
+┌ how do I spawn?                  2026-09-24 ┐
+│ verdict  empty: nothing found                │
+│ how      1. Look [unsourced]                 │
+│ snippet  empty: no example exists            │
+│ source   empty: no sources cited             │
+└──────────────────────────────────────────────┘
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (card
+    (card_header
+      (frame)
+      (question
+        (word)
+        (word)
+        (word)
+        (word))
+      (date)
+      (frame))
+    (slot
+      (frame)
+      (label)
+      (empty_marker)
+      (word)
+      (word)
+      (frame))
+    (slot
+      (frame)
+      (label)
+      (list_marker)
+      (word)
+      (ref)
+      (frame))
+    (snippet_slot
+      (frame)
+      (label)
+      (empty_marker)
+      (word)
+      (word)
+      (word)
+      (frame))
+    (slot
+      (frame)
+      (label)
+      (empty_marker)
+      (word)
+      (word)
+      (word)
+      (frame))
+    (card_footer
+      (frame))))
+
+================================================================================
+A matrix names its criteria at line start only
+================================================================================
+
+question: which techniques exist to simulate water
+
+           | Pipes        | SPH              |
+looks like | heightmap [1]| blobs verdict    |
+verdict    | cheap        |                  |
+
+[1] https://x.rs/a
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (sheet
+    (sheet_question
+      (label)
+      (question
+        (word)
+        (word)
+        (word)
+        (word)
+        (word)
+        (word)))
+    (sheet_line
+      (drawing)
+      (word)
+      (drawing)
+      (word)
+      (drawing))
+    (sheet_line
+      (criterion)
+      (drawing)
+      (word)
+      (ref)
+      (drawing)
+      (word)
+      (word)
+      (drawing))
+    (sheet_line
+      (criterion)
+      (drawing)
+      (word)
+      (drawing)
+      (drawing))
+    (sheet_line
+      (ref)
+      (url))))
+
+================================================================================
+A figure's box bars are drawing, not a card frame
+================================================================================
+
+question: how does a flow field work
+
+    ┌──┬──┐  ───►  │ →│ ●│
+    │ 1│ 1│◄ goal └──┴──┘
+    Units only read the field. [1]
+
+[1] https://x.rs/a
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (sheet
+    (sheet_question
+      (label)
+      (question
+        (word)
+        (word)
+        (word)
+        (word)
+        (word)
+        (word)))
+    (sheet_line
+      (drawing)
+      (drawing)
+      (drawing)
+      (drawing)
+      (drawing))
+    (sheet_line
+      (drawing)
+      (word)
+      (drawing)
+      (word)
+      (drawing)
+      (word)
+      (drawing))
+    (sheet_line
+      (word)
+      (word)
+      (word)
+      (word)
+      (word)
+      (ref))
+    (sheet_line
+      (ref)
+      (url))))

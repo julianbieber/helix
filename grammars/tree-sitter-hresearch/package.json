@@ -1,0 +1,21 @@
+{
+  "name": "tree-sitter-hresearch",
+  "version": "0.1.0",
+  "description": "hresearch research-file grammar for tree-sitter (syntax highlighting)",
+  "repository": "https://github.com/julianbieber/helix",
+  "license": "MIT",
+  "tree-sitter": [
+    {
+      "scope": "source.hresearch",
+      "file-types": [
+        "hresearch"
+      ],
+      "highlights": [
+        "queries/highlights.scm"
+      ],
+      "injections": [
+        "queries/injections.scm"
+      ]
+    }
+  ]
+}

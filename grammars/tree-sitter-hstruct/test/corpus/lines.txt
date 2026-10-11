@@ -1,0 +1,54 @@
+================================================================================
+A header and a counted standard
+================================================================================
+
+repo: wusel
+root: src
+
+## Modules form a DAG
+
+A cycle means neither module can be read alone.
+
+check: import cycles
+budget: 20
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (header_field key: (header_key) value: (value))
+  (header_field key: (header_key) value: (value))
+  (standard_header (section_marker) name: (standard_name))
+  (prose)
+  (verification key: (verification_key) value: (value))
+  (verification key: (verification_key) value: (value)))
+
+================================================================================
+A reviewed standard
+================================================================================
+
+## Screen content is torn down by tag
+
+review: every spawn in an OnEnter carries a DespawnOnExit
+audited: 2026-09-01
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (standard_header (section_marker) name: (standard_name))
+  (verification key: (verification_key) value: (value))
+  (verification key: (verification_key) value: (value)))
+
+================================================================================
+Prose is never mistaken for a construct
+================================================================================
+
+# a comment about budgets
+Fan-out is what makes a module expensive to change.
+The count matters more than the size: check the collaborators.
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (comment)
+  (prose)
+  (prose))

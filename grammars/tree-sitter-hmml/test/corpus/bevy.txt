@@ -1,0 +1,272 @@
+==================
+world sections and markers
+==================
+
+## components
+struct Wave {
+  index: u32,
+}
+marker Spawner
+
+## resources
+struct WaveState {
+  due: bool,
+}
+
+## events
+use enemy-waves: WaveCleared
+
+---
+
+(source_file
+  (section_header
+    (section_marker)
+    (section_name))
+  (type_definition
+    (identifier)
+    (member
+      (identifier)
+      (type
+        (identifier))))
+  (marker_declaration
+    (identifier))
+  (section_header
+    (section_marker)
+    (section_name))
+  (type_definition
+    (identifier)
+    (member
+      (identifier)
+      (type
+        (identifier))))
+  (section_header
+    (section_marker)
+    (section_name))
+  (use_import
+    (spec_ref)
+    (identifier)))
+
+==================
+systems section with access blocks
+==================
+
+## systems
+tick_wave_timer — advances the wave clock @ src/waves/timer.rs
+  schedule: FixedUpdate
+  reads:    WaveConfig, Time
+  writes:   WaveState
+spawn_enemies — spawns the next wave @ spec spawn-enemies
+  schedule: FixedUpdate
+  after:    tick_wave_timer
+  run_if:   WaveState.due
+  query:    Transform + Spawner
+  spawns:   EnemyHealth, Wave
+
+---
+
+(source_file
+  (section_header
+    (section_marker)
+    (section_name))
+  (module_entry
+    (identifier)
+    (separator)
+    (responsibility)
+    (path))
+  (access_entry
+    (access_key)
+    (value))
+  (access_entry
+    (access_key)
+    (value))
+  (access_entry
+    (access_key)
+    (value))
+  (module_entry
+    (identifier)
+    (separator)
+    (responsibility)
+    (spec_annotation
+      (spec_keyword)
+      (spec_ref)))
+  (access_entry
+    (access_key)
+    (value))
+  (access_entry
+    (access_key)
+    (value))
+  (access_entry
+    (access_key)
+    (value))
+  (access_entry
+    (access_key)
+    (value))
+  (access_entry
+    (access_key)
+    (value)))
+
+==================
+standalone access section
+==================
+
+## access
+schedule: FixedUpdate
+set:      WaveSpawning
+before:   detect_cleared
+query:    Transform + Spawner - SpawnBudget
+despawns: SpawnBudget
+emits:    WaveCleared
+consumes: WaveCleared
+
+---
+
+(source_file
+  (section_header
+    (section_marker)
+    (section_name))
+  (access_entry
+    (access_key)
+    (value))
+  (access_entry
+    (access_key)
+    (value))
+  (access_entry
+    (access_key)
+    (value))
+  (access_entry
+    (access_key)
+    (value))
+  (access_entry
+    (access_key)
+    (value))
+  (access_entry
+    (access_key)
+    (value))
+  (access_entry
+    (access_key)
+    (value)))
+
+==================
+an access key is still a member name inside a struct
+==================
+
+## components
+struct Budget {
+  set: u32,
+  query: String,
+}
+
+---
+
+(source_file
+  (section_header
+    (section_marker)
+    (section_name))
+  (type_definition
+    (identifier)
+    (member
+      (identifier)
+      (type
+        (identifier)))
+    (member
+      (identifier)
+      (type
+        (identifier)))))
+
+==================
+role-less data section in a Bevy spec
+==================
+
+## data
+enum SpawnPattern { ring, scatter }
+struct SpawnPoint {
+  offset: Vec2,
+  pattern: SpawnPattern,
+}
+
+---
+
+(source_file
+  (section_header
+    (section_marker)
+    (section_name))
+  (type_definition
+    (identifier)
+    (member
+      (identifier))
+    (member
+      (identifier)))
+  (type_definition
+    (identifier)
+    (member
+      (identifier)
+      (type
+        (identifier)))
+    (member
+      (identifier)
+      (type
+        (identifier)))))
+
+================================================================================
+rust references: bodyless, with a delta body, and a marker
+================================================================================
+
+## components
+struct Wave @ src/waves/mod.rs
+struct EnemyHealth @ src/waves/mod.rs {
+  hp: f32,
+  + streak: u32,
+  - remaining,
+}
+marker Spawner @ src/waves/mod.rs
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (section_header
+    (section_marker)
+    name: (section_name))
+  (type_definition
+    name: (identifier)
+    path: (type_path))
+  (type_definition
+    name: (identifier)
+    path: (type_path)
+    (member
+      name: (identifier)
+      type: (type
+        name: (identifier)))
+    (member
+      delta: (delta)
+      name: (identifier)
+      type: (type
+        name: (identifier)))
+    (member
+      delta: (delta)
+      name: (identifier)))
+  (marker_declaration
+    name: (identifier)
+    path: (type_path)))
+
+================================================================================
+extern imports name a crate, not a sibling unit
+================================================================================
+
+## components
+use extern avian3d::prelude: Collider, RigidBody
+use enemy-waves: Wave
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (section_header
+    (section_marker)
+    name: (section_name))
+  (use_import
+    (extern_keyword)
+    crate: (crate_path)
+    type: (identifier)
+    type: (identifier))
+  (use_import
+    ref: (spec_ref)
+    type: (identifier)))

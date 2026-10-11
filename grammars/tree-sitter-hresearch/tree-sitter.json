@@ -1,0 +1,41 @@
+{
+  "$schema": "https://tree-sitter.github.io/tree-sitter/assets/schemas/config.schema.json",
+  "grammars": [
+    {
+      "name": "hresearch",
+      "camelcase": "Hresearch",
+      "scope": "source.hresearch",
+      "path": ".",
+      "file-types": [
+        "hresearch"
+      ],
+      "highlights": [
+        "../../runtime/queries/hresearch/highlights.scm"
+      ],
+      "injections": [
+        "../../runtime/queries/hresearch/injections.scm"
+      ]
+    }
+  ],
+  "metadata": {
+    "version": "0.1.0",
+    "license": "MIT",
+    "description": "hresearch research-file grammar for tree-sitter",
+    "authors": [
+      {
+        "name": "Julian Bieber"
+      }
+    ],
+    "links": {
+      "repository": "https://github.com/julianbieber/helix"
+    }
+  },
+  "bindings": {
+    "c": false,
+    "go": false,
+    "node": false,
+    "python": false,
+    "rust": false,
+    "swift": false
+  }
+}
