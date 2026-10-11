@@ -1,0 +1,14 @@
+{
+  "name": "tree-sitter-hstruct",
+  "version": "0.1.0",
+  "description": "HSTRUCT (hobby repo structure language) grammar for tree-sitter (syntax highlighting)",
+  "repository": "https://github.com/julianbieber/helix",
+  "license": "MIT",
+  "tree-sitter": [
+    {
+      "scope": "source.hstruct",
+      "file-types": ["hstruct"],
+      "highlights": ["queries/highlights.scm"]
+    }
+  ]
+}

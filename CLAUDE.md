@@ -132,3 +132,25 @@ Test helpers are in `helix-term/tests/test/helpers.rs`. The `.cargo/config.toml`
 - `runtime/themes/` — color themes
 - `runtime/grammars/` — compiled tree-sitter grammar shared libraries
 - `languages.toml` — language definitions, LSP server configs, grammar sources
+
+## This Fork: Installing on a Machine
+
+This checkout (branch `custom`) owns everything needed to build and configure `hx`.
+`just` lists the recipes. On a new machine, `just install` builds the binary,
+installs the config and builds the grammars.
+
+- **`languages.toml` here is the config.** `just install-config` copies it to
+  `~/.config/helix/languages.toml` and links `~/.config/helix/runtime` to
+  `runtime/`. The installed file is an output: edit this checkout and re-run. It
+  may list language servers that a given machine has not installed.
+- **`grammars/tree-sitter-{hmml,hstruct,hresearch}`** are this fork's own
+  grammars, with `src/parser.c` committed so a C compiler is all a machine needs.
+  Their `[[grammar]]` entries are *not* in `languages.toml`: `helix-loader`
+  resolves a local grammar path relative to the working directory, so
+  `install-config` appends them with this checkout's absolute path.
+- **Queries for those languages live only in `runtime/queries/<lang>/`.** Each
+  grammar's `tree-sitter.json` points there rather than keeping a second copy.
+- **`just build` sets `HELIX_DISABLE_AUTO_GRAMMAR_BUILD=1`.** The automatic grammar
+  step runs `--grammar fetch` in strict mode, so one grammar whose remote has gone
+  away fails the whole binary build. `just grammars` builds them separately, where
+  a failure is survivable.

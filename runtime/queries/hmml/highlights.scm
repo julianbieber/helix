@@ -2,9 +2,9 @@
 ; Capture names follow Helix's highlight scopes. Later matches win, so more
 ; specific patterns (e.g. builtin types) come after the generic ones.
 ;
-; Installed to <helix-checkout>/runtime/queries/hmml/ by `just wire-helix` — Helix
-; resolves queries by language name. This file is the source; do not edit the
-; installed copy. It deliberately does not pull in the work mml queries: that
+; The only copy: Helix resolves queries by language name, and
+; grammars/tree-sitter-hmml/tree-sitter.json points here too. It deliberately
+; does not pull in the work mml queries: that
 ; made hobby highlighting depend on the work grammar's queries being present.
 ;
 ; NEVER write Helix's inherit-directive syntax in this file, not even inside a

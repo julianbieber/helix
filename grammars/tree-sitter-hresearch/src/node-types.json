@@ -1,0 +1,341 @@
+[
+  {
+    "type": "card",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "card_footer",
+          "named": true
+        },
+        {
+          "type": "card_header",
+          "named": true
+        },
+        {
+          "type": "slot",
+          "named": true
+        },
+        {
+          "type": "snippet_slot",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "card_footer",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "frame",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "card_header",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "date",
+          "named": true
+        },
+        {
+          "type": "frame",
+          "named": true
+        },
+        {
+          "type": "question",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "question",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "word",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "sheet",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "sheet_line",
+          "named": true
+        },
+        {
+          "type": "sheet_question",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "sheet_line",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "criterion",
+          "named": true
+        },
+        {
+          "type": "drawing",
+          "named": true
+        },
+        {
+          "type": "ref",
+          "named": true
+        },
+        {
+          "type": "url",
+          "named": true
+        },
+        {
+          "type": "word",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "sheet_question",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "label",
+          "named": true
+        },
+        {
+          "type": "question",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "slot",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "dash",
+          "named": true
+        },
+        {
+          "type": "empty_marker",
+          "named": true
+        },
+        {
+          "type": "frame",
+          "named": true
+        },
+        {
+          "type": "label",
+          "named": true
+        },
+        {
+          "type": "link_arrow",
+          "named": true
+        },
+        {
+          "type": "list_marker",
+          "named": true
+        },
+        {
+          "type": "quote",
+          "named": true
+        },
+        {
+          "type": "ref",
+          "named": true
+        },
+        {
+          "type": "url",
+          "named": true
+        },
+        {
+          "type": "word",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "snippet_slot",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "code",
+          "named": true
+        },
+        {
+          "type": "code_break",
+          "named": true
+        },
+        {
+          "type": "dash",
+          "named": true
+        },
+        {
+          "type": "empty_marker",
+          "named": true
+        },
+        {
+          "type": "frame",
+          "named": true
+        },
+        {
+          "type": "label",
+          "named": true
+        },
+        {
+          "type": "link_arrow",
+          "named": true
+        },
+        {
+          "type": "list_marker",
+          "named": true
+        },
+        {
+          "type": "quote",
+          "named": true
+        },
+        {
+          "type": "ref",
+          "named": true
+        },
+        {
+          "type": "url",
+          "named": true
+        },
+        {
+          "type": "word",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "source_file",
+    "named": true,
+    "root": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "card",
+          "named": true
+        },
+        {
+          "type": "sheet",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "code",
+    "named": true
+  },
+  {
+    "type": "code_break",
+    "named": true
+  },
+  {
+    "type": "criterion",
+    "named": true
+  },
+  {
+    "type": "dash",
+    "named": true
+  },
+  {
+    "type": "date",
+    "named": true
+  },
+  {
+    "type": "drawing",
+    "named": true
+  },
+  {
+    "type": "empty_marker",
+    "named": true
+  },
+  {
+    "type": "frame",
+    "named": true
+  },
+  {
+    "type": "label",
+    "named": true
+  },
+  {
+    "type": "link_arrow",
+    "named": true
+  },
+  {
+    "type": "list_marker",
+    "named": true
+  },
+  {
+    "type": "quote",
+    "named": true
+  },
+  {
+    "type": "ref",
+    "named": true
+  },
+  {
+    "type": "url",
+    "named": true
+  },
+  {
+    "type": "word",
+    "named": true
+  }
+]
