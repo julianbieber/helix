@@ -2065,6 +2065,10 @@ scope = "source.wesl"
 file-types = ["wesl"]
 comment-token = "//"
 block-comment-tokens = { start = "/*", end = "*/" }
+language-servers = [ "wgsl-analyzer" ]
+# The WESL package a shader belongs to, so wgsl-analyzer is started on it rather than
+# on the enclosing repository, whose Cargo.toml it either cannot read or dies on.
+roots = ["wesl.toml"]
 indent = { tab-width = 4, unit = "    " }
 
 [[grammar]]
@@ -2074,7 +2078,7 @@ source = { git = "https://github.com/wgsl-tooling-wg/tree-sitter-wesl", rev = "9
 [[language]]
 name = "wgsl"
 scope = "source.wgsl"
-file-types = ["wgsl", "wesl"]
+file-types = ["wgsl"]
 comment-token = "//"
 block-comment-tokens = { start = "/*", end = "*/" }
 language-servers = [ "wgsl-analyzer" ]

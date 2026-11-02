@@ -49,6 +49,12 @@
 (api_entry receiver: (identifier) @type)
 (param name: (identifier) @variable.parameter)
 
+; A test plan's entries (grammar §12), and the `^name` anchors they point at.
+"test" @keyword.function
+(test_entry name: (identifier) @function)
+(test_entry description: (responsibility) @string)
+(anchor) @label
+
 ; Cross-spec references: `@ spec unit`, `@ spec unit::function` (grammar §5.4).
 (spec_keyword) @keyword.directive
 (spec_ref) @string.special.path
