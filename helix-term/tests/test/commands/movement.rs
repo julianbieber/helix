@@ -610,7 +610,7 @@ async fn select_all_children() -> anyhow::Result<()> {
             indoc! {r##"
                 let foo = bar#[(a, b, c)|]#;
             "##},
-            "<A-I>",
+            "<S-down>",
             indoc! {r##"
                 let foo = bar(#[a|]#, #(b|)#, #(c|)#);
             "##},
@@ -625,7 +625,7 @@ async fn select_all_children() -> anyhow::Result<()> {
                     5,
                 ]|]#;
             "##},
-            "<A-I>",
+            "<S-down>",
             indoc! {r##"
                 let a = [
                     #[1|]#,
@@ -647,7 +647,7 @@ async fn select_all_children() -> anyhow::Result<()> {
                     5,
                 ]]#;
             "##},
-            "<A-I>",
+            "<S-down>",
             indoc! {r##"
                 let a = [
                     #[|1]#,
@@ -669,7 +669,7 @@ async fn select_all_children() -> anyhow::Result<()> {
                     #(5|)#,
                 ];
             "##},
-            "<A-I>",
+            "<S-down>",
             indoc! {r##"
                 let a = [
                     #[1|]#,
@@ -699,7 +699,7 @@ async fn select_all_children() -> anyhow::Result<()> {
                     "five",
                 ]|)#;
             "##},
-            "<A-I>",
+            "<S-down>",
             indoc! {r##"
                 let a = [
                     #[|1]#,
@@ -737,7 +737,7 @@ async fn test_select_next_sibling() -> anyhow::Result<()> {
                 fn dec(x: usize) -> usize { x - 1 }
                 fn ident(x: usize) -> usize { x }
             "##},
-            "<A-n>",
+            "<right>",
             indoc! {r##"
                 fn inc(x: usize) -> usize { x + 1 }
                 #[fn dec(x: usize) -> usize { x - 1 }|]#
@@ -751,7 +751,7 @@ async fn test_select_next_sibling() -> anyhow::Result<()> {
                 fn dec(x: usize) -> usize { x - 1 }
                 fn ident(x: usize) -> usize { x }
             "##},
-            "<A-n><A-;><A-n>",
+            "<right><A-;><right>",
             indoc! {r##"
                 fn inc(x: usize) -> usize { x + 1 }
                 fn dec(x: usize) -> usize { x - 1 }
@@ -777,7 +777,7 @@ async fn test_select_prev_sibling() -> anyhow::Result<()> {
                 fn dec(x: usize) -> usize { x - 1 }
                 #[|f]#n ident(x: usize) -> usize { x }
             "##},
-            "<A-p>",
+            "<left>",
             indoc! {r##"
                 fn inc(x: usize) -> usize { x + 1 }
                 #[|fn dec(x: usize) -> usize { x - 1 }]#
@@ -791,7 +791,7 @@ async fn test_select_prev_sibling() -> anyhow::Result<()> {
                 fn dec(x: usize) -> usize { x - 1 }
                 #[|f]#n ident(x: usize) -> usize { x }
             "##},
-            "<A-p><A-;><A-p>",
+            "<left><A-;><left>",
             indoc! {r##"
                 #[|fn inc(x: usize) -> usize { x + 1 }]#
                 fn dec(x: usize) -> usize { x - 1 }

@@ -22,13 +22,13 @@ async fn insert_mode_cursor_position() -> anyhow::Result<()> {
 /// Range direction is preserved when escaping insert mode to normal
 #[tokio::test(flavor = "multi_thread")]
 async fn insert_to_normal_mode_cursor_position() -> anyhow::Result<()> {
-    test(("#[f|]#oo\n", "vll<A-;><esc>", "#[|foo]#\n")).await?;
+    test(("#[f|]#oo\n", "v##<A-;><esc>", "#[|foo]#\n")).await?;
     test((
         indoc! {"\
                 #[f|]#oo
                 #(b|)#ar"
         },
-        "vll<A-;><esc>",
+        "v##<A-;><esc>",
         indoc! {"\
                 #[|foo]#
                 #(|bar)#"
@@ -455,7 +455,7 @@ async fn select_mode_tree_sitter_next_function_is_union_of_objects() -> anyhow::
                 /// Decrements
                 fn dec(x: usize) -> usize { x - 1 }
             "},
-            "]fv]f",
+            "kfvkf",
             indoc! {"\
                 /// Increments
                 #[fn inc(x: usize) -> usize { x + 1 }
@@ -480,7 +480,7 @@ async fn select_mode_tree_sitter_prev_function_unselects_object() -> anyhow::Res
                 /// Decrements
                 fn dec(x: usize) -> usize { x - 1 }|]#
             "},
-            "v[f",
+            "vjf",
             indoc! {"\
                 /// Increments
                 #[fn inc(x: usize) -> usize { x + 1 }|]#
@@ -508,7 +508,7 @@ async fn select_mode_tree_sitter_prev_function_goes_backwards_to_object() -> any
                 /// Identity
                 #[fn ident(x: usize) -> usize { x }|]#
             "},
-            "v[f",
+            "vjf",
             indoc! {"\
                 /// Increments
                 fn inc(x: usize) -> usize { x + 1 }
@@ -532,7 +532,7 @@ async fn select_mode_tree_sitter_prev_function_goes_backwards_to_object() -> any
                 /// Identity
                 #[fn ident(x: usize) -> usize { x }|]#
             "},
-            "v[f[f",
+            "vjfjf",
             indoc! {"\
                 /// Increments
                 #[|fn inc(x: usize) -> usize { x + 1 }
@@ -619,7 +619,7 @@ async fn find_char_line_ending() -> anyhow::Result<()> {
             #[|t]#wo
             three"
         },
-        "T<ret>gll2f<ret>",
+        "T<ret>gl#2f<ret>",
         indoc! {
             "\
             one
@@ -792,7 +792,7 @@ async fn tree_sitter_motions_work_across_injections() -> anyhow::Result<()> {
         AppBuilder::new().with_file("foo.html", None),
         (
             "<script>let #[|x]# = 1;</script>",
-            "<A-o>",
+            "<up>",
             "<script>let #[|x = 1]#;</script>",
         ),
     )
@@ -804,7 +804,7 @@ async fn tree_sitter_motions_work_across_injections() -> anyhow::Result<()> {
         AppBuilder::new().with_file("foo.html", None),
         (
             "<script>#[|let x = 1;]#</script>",
-            "<A-o>",
+            "<up>",
             "#[|<script>let x = 1;</script>]#",
         ),
     )
@@ -814,7 +814,7 @@ async fn tree_sitter_motions_work_across_injections() -> anyhow::Result<()> {
         AppBuilder::new().with_file("foo.html", None),
         (
             "<script>let #[|x = 1]#;</script>",
-            "<A-i>",
+            "<down>",
             "<script>let #[|x]# = 1;</script>",
         ),
     )
@@ -824,7 +824,7 @@ async fn tree_sitter_motions_work_across_injections() -> anyhow::Result<()> {
         AppBuilder::new().with_file("foo.html", None),
         (
             "<script>let #[|x]# = 1;</script>",
-            "<A-n>",
+            "<right>",
             "<script>let x #[=|]# 1;</script>",
         ),
     )
@@ -834,7 +834,7 @@ async fn tree_sitter_motions_work_across_injections() -> anyhow::Result<()> {
         AppBuilder::new().with_file("foo.html", None),
         (
             "<script>let #[|x]# = 1;</script>",
-            "<A-p>",
+            "<left>",
             "<script>#[|let]# x = 1;</script>",
         ),
     )

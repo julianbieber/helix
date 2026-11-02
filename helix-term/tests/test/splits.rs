@@ -138,19 +138,19 @@ async fn test_changes_in_splits_apply_to_all_views() -> anyhow::Result<()> {
     // The key sequence here:
     // * <C-w>v       Create a vertical split of the current buffer.
     //                Both views look at the same doc.
-    // * [<space>     Add a line ending to the beginning of the document.
+    // * j<space>     Add a line ending to the beginning of the document.
     //                The cursor is now at line 2 in window 2.
     // * <C-s>        Save that selection to the jumplist in window 2.
     // * <C-w>w       Switch to window 1.
-    // * kd           Delete line 1 in window 1.
+    // * üd           Delete line 1 in window 1.
     // * <C-w>q       Close window 1, focusing window 2.
     // * d            Delete line 1 in window 2.
     //
     // This panicked in the past because the jumplist entry on line 2 of window 2
-    // was not updated and after the `kd` step, pointed outside of the document.
+    // was not updated and after the `üd` step, pointed outside of the document.
     test((
         "#[|]#",
-        "<C-w>v[<space><C-s><C-w>wkd<C-w>qd",
+        "<C-w>vj<space><C-s><C-w>wüd<C-w>qd",
         "#[|]#",
         LineFeedHandling::AsIs,
     ))
@@ -161,7 +161,7 @@ async fn test_changes_in_splits_apply_to_all_views() -> anyhow::Result<()> {
     // correct order as we switch between windows.
     test((
         "#[|]#",
-        "[<space>[<space>[<space><C-w>vuuu<C-w>wUUU<C-w>quuu",
+        "j<space>j<space>j<space><C-w>vuuu<C-w>wUUU<C-w>quuu",
         "#[|]#",
         LineFeedHandling::AsIs,
     ))
@@ -174,20 +174,20 @@ async fn test_changes_in_splits_apply_to_all_views() -> anyhow::Result<()> {
     // numbers. If we apply these up/down transactions in the wrong order, this case
     // panics.
     // The key sequence:
-    // * 3[<space>    Create three empty lines so we are at the end of the document.
+    // * 3j<space>    Create three empty lines so we are at the end of the document.
     // * <C-w>v<C-s>  Create a split and save that point at the end of the document
     //                in the jumplist.
     // * <C-w>w       Switch back to the first window.
     // * uu           Undo twice (not three times which would bring us back to the
     //                root of the tree).
-    // * 3[<space>    Create three empty lines. Now the end of the document is past
+    // * 3j<space>    Create three empty lines. Now the end of the document is past
     //                where it was on step 1.
     // * <C-w>q       Close window 1, focusing window 2 and causing a sync. This step
     //                panics if we don't apply in the right order.
     // * %d           Clean up the buffer.
     test((
         "#[|]#",
-        "3[<space><C-w>v<C-s><C-w>wuu3[<space><C-w>q%d",
+        "3j<space><C-w>v<C-s><C-w>wuu3j<space><C-w>q%d",
         "#[|]#",
         LineFeedHandling::AsIs,
     ))

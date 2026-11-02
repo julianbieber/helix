@@ -16,7 +16,7 @@ async fn search_selection_detect_word_boundaries_at_eof() -> anyhow::Result<()> 
             #[o|]#ne
             two
             three"},
-        "gej*h",
+        "geä*ö",
         indoc! {"\
             one
             two
@@ -278,14 +278,14 @@ async fn test_multi_selection_shell_commands() -> anyhow::Result<()> {
 async fn test_undo_redo() -> anyhow::Result<()> {
     // A jumplist selection is created at a point which is undone.
     //
-    // * 2[<space>   Add two newlines at line start. We're now on line 3.
+    // * 2j<space>   Add two newlines at line start. We're now on line 3.
     // * <C-s>       Save the selection on line 3 in the jumplist.
     // * u           Undo the two newlines. We're now on line 1.
     // * <C-o><C-i>  Jump forward an back again in the jumplist. This would panic
     //               if the jumplist were not being updated correctly.
     test((
         "#[|]#",
-        "2[<space><C-s>u<C-o><C-i>",
+        "2j<space><C-s>u<C-o><C-i>",
         "#[|]#",
         LineFeedHandling::AsIs,
     ))
@@ -293,16 +293,16 @@ async fn test_undo_redo() -> anyhow::Result<()> {
 
     // A jumplist selection is passed through an edit and then an undo and then a redo.
     //
-    // * [<space>    Add a newline at line start. We're now on line 2.
+    // * j<space>    Add a newline at line start. We're now on line 2.
     // * <C-s>       Save the selection on line 2 in the jumplist.
-    // * kd          Delete line 1. The jumplist selection should be adjusted to the new line 1.
-    // * uU          Undo and redo the `kd` edit.
+    // * üd          Delete line 1. The jumplist selection should be adjusted to the new line 1.
+    // * uU          Undo and redo the `üd` edit.
     // * <C-o>       Jump back in the jumplist. This would panic if the jumplist were not being
     //               updated correctly.
     // * <C-i>       Jump forward to line 1.
     test((
         "#[|]#",
-        "[<space><C-s>kduU<C-o><C-i>",
+        "j<space><C-s>üduU<C-o><C-i>",
         "#[|]#",
         LineFeedHandling::AsIs,
     ))
@@ -311,7 +311,7 @@ async fn test_undo_redo() -> anyhow::Result<()> {
     // In this case we 'redo' manually to ensure that the transactions are composing correctly.
     test((
         "#[|]#",
-        "[<space>u[<space>u",
+        "j<space>uj<space>u",
         "#[|]#",
         LineFeedHandling::AsIs,
     ))
@@ -364,7 +364,7 @@ async fn test_character_info() -> anyhow::Result<()> {
     // UTF-8, single byte
     test_key_sequence(
         &mut helpers::AppBuilder::new().build()?,
-        Some("ih<esc>h:char<ret>"),
+        Some("ih<esc>ö:char<ret>"),
         Some(&|app| {
             assert_eq!(
                 r#""h" (U+0068) Dec 104 Hex 68"#,
@@ -378,7 +378,7 @@ async fn test_character_info() -> anyhow::Result<()> {
     // UTF-8, multi-byte
     test_key_sequence(
         &mut helpers::AppBuilder::new().build()?,
-        Some("ië<esc>h:char<ret>"),
+        Some("ië<esc>ö:char<ret>"),
         Some(&|app| {
             assert_eq!(
                 r#""ë" (U+0065 U+0308) Hex 65 + cc 88"#,
@@ -406,7 +406,7 @@ async fn test_character_info() -> anyhow::Result<()> {
     // Non-UTF-8
     test_key_sequence(
         &mut helpers::AppBuilder::new().build()?,
-        Some(":encoding ascii<ret>ih<esc>h:char<ret>"),
+        Some(":encoding ascii<ret>ih<esc>ö:char<ret>"),
         Some(&|app| {
             assert_eq!(r#""h" Dec 104 Hex 68"#, app.editor.get_status().unwrap().0);
         }),
@@ -423,7 +423,7 @@ async fn test_delete_char_backward() -> anyhow::Result<()> {
     test(("#(x|)# #[x|]#", "c<space><backspace><esc>", "#[\n|]#")).await?;
     test((
         "#( |)##( |)#a#( |)#axx#[x|]#a",
-        "li<backspace><esc>",
+        "#i<backspace><esc>",
         "#(a|)##(|a)#xx#[|a]#",
     ))
     .await?;
