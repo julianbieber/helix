@@ -6379,9 +6379,9 @@ fn surround_add(cx: &mut Context) {
         let (open, close, surround_len) = match event.char() {
             Some(ch) => {
                 let (o, c) = match_brackets::get_pair(ch);
-                let mut open = Tendril::new();
+                let mut open = Tendril::default();
                 open.push(o);
-                let mut close = Tendril::new();
+                let mut close = Tendril::default();
                 close.push(c);
                 (open, close, 2)
             }
@@ -6471,7 +6471,7 @@ fn surround_replace(cx: &mut Context) {
             let transaction = Transaction::change(
                 doc.text(),
                 sorted_pos.iter().map(|&pos| {
-                    let mut t = Tendril::new();
+                    let mut t = Tendril::default();
                     t.push(pos.1);
                     (pos.0, pos.0 + 1, Some(t))
                 }),
@@ -7013,7 +7013,7 @@ fn jump_to_label(cx: &mut Context, labels: Vec<Range>, behaviour: Movement) {
         return;
     }
     let alphabet_char = |i| {
-        let mut res = Tendril::new();
+        let mut res = Tendril::default();
         res.push(alphabet[i]);
         res
     };

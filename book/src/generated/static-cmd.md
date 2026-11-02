@@ -1,18 +1,18 @@
 | Name | Description | Default keybinds |
 | --- | --- | --- |
 | `no_op` | Do nothing |  |
-| `move_char_left` | Move left | normal: `` h ``, `` <left> ``, insert: `` <left> `` |
-| `move_char_right` | Move right | normal: `` l ``, `` <right> ``, insert: `` <right> `` |
+| `move_char_left` | Move left | normal: `` ö ``, insert: `` <left> `` |
+| `move_char_right` | Move right | normal: `` # ``, insert: `` <right> `` |
 | `move_line_up` | Move up | normal: `` gk `` |
 | `move_line_down` | Move down | normal: `` gj `` |
-| `move_visual_line_up` | Move up | normal: `` k ``, `` <up> ``, insert: `` <up> `` |
-| `move_visual_line_down` | Move down | normal: `` j ``, `` <down> ``, insert: `` <down> `` |
-| `extend_char_left` | Extend left | select: `` h ``, `` <left> `` |
-| `extend_char_right` | Extend right | select: `` l ``, `` <right> `` |
+| `move_visual_line_up` | Move up | normal: `` ü ``, insert: `` <A-ü> `` |
+| `move_visual_line_down` | Move down | normal: `` ä ``, insert: `` <A-ä> `` |
+| `extend_char_left` | Extend left | select: `` ö `` |
+| `extend_char_right` | Extend right | select: `` # `` |
 | `extend_line_up` | Extend up | select: `` gk `` |
 | `extend_line_down` | Extend down | select: `` gj `` |
-| `extend_visual_line_up` | Extend up | select: `` k ``, `` <up> `` |
-| `extend_visual_line_down` | Extend down | select: `` j ``, `` <down> `` |
+| `extend_visual_line_up` | Extend up | select: `` ü `` |
+| `extend_visual_line_down` | Extend down | select: `` ä `` |
 | `copy_selection_on_next_line` | Copy selection on next line | normal: `` C ``, select: `` C `` |
 | `copy_selection_on_prev_line` | Copy selection on previous line | normal: `` <A-C> ``, select: `` <A-C> `` |
 | `move_next_word_start` | Move to start of next word | normal: `` w `` |
@@ -54,8 +54,8 @@
 | `repeat_last_motion` | Repeat last motion | normal: `` <A-.> ``, select: `` <A-.> `` |
 | `replace` | Replace with new char | normal: `` r ``, select: `` r `` |
 | `switch_case` | Switch (toggle) case | normal: `` ~ ``, select: `` ~ `` |
-| `switch_to_uppercase` | Switch to uppercase | normal: `` <A-`> ``, select: `` <A-`> `` |
-| `switch_to_lowercase` | Switch to lowercase | normal: `` ` ``, select: `` ` `` |
+| `switch_to_uppercase` | Switch to uppercase | normal: `` <A-=> ``, select: `` <A-=> `` |
+| `switch_to_lowercase` | Switch to lowercase | normal: `` = ``, select: `` = `` |
 | `page_up` | Move page up | normal: `` <C-b> ``, `` Z<C-b> ``, `` z<C-b> ``, `` <pageup> ``, `` Z<pageup> ``, `` z<pageup> ``, select: `` <C-b> ``, `` Z<C-b> ``, `` z<C-b> ``, `` <pageup> ``, `` Z<pageup> ``, `` z<pageup> ``, insert: `` <pageup> `` |
 | `page_down` | Move page down | normal: `` <C-f> ``, `` Z<C-f> ``, `` z<C-f> ``, `` <pagedown> ``, `` Z<pagedown> ``, `` z<pagedown> ``, select: `` <C-f> ``, `` Z<C-f> ``, `` z<C-f> ``, `` <pagedown> ``, `` Z<pagedown> ``, `` z<pagedown> ``, insert: `` <pagedown> `` |
 | `half_page_up` | Move half page up |  |
@@ -126,8 +126,8 @@
 | `exit_select_mode` | Exit selection mode | select: `` <esc> `` |
 | `goto_definition` | Goto definition | normal: `` gd ``, select: `` gd `` |
 | `goto_declaration` | Goto declaration | normal: `` gD ``, select: `` gD `` |
-| `add_newline_above` | Add newline above | normal: `` [<space> ``, select: `` [<space> `` |
-| `add_newline_below` | Add newline below | normal: `` ]<space> ``, select: `` ]<space> `` |
+| `add_newline_above` | Add newline above | normal: `` j<space> ``, select: `` j<space> `` |
+| `add_newline_below` | Add newline below | normal: `` k<space> ``, select: `` k<space> `` |
 | `goto_type_definition` | Goto type definition | normal: `` gy ``, select: `` gy `` |
 | `goto_implementation` | Goto implementation | normal: `` gi ``, select: `` gi `` |
 | `goto_file_start` | Goto line number `<n>` else file start | normal: `` gg `` |
@@ -147,14 +147,14 @@
 | `goto_line` | Goto line | normal: `` G ``, select: `` G `` |
 | `goto_last_line` | Goto last line | normal: `` ge `` |
 | `extend_to_last_line` | Extend to last line | select: `` ge `` |
-| `goto_first_diag` | Goto first diagnostic | normal: `` [D ``, select: `` [D `` |
-| `goto_last_diag` | Goto last diagnostic | normal: `` ]D ``, select: `` ]D `` |
-| `goto_next_diag` | Goto next diagnostic | normal: `` ]d ``, select: `` ]d `` |
-| `goto_prev_diag` | Goto previous diagnostic | normal: `` [d ``, select: `` [d `` |
-| `goto_next_change` | Goto next change | normal: `` ]g ``, select: `` ]g `` |
-| `goto_prev_change` | Goto previous change | normal: `` [g ``, select: `` [g `` |
-| `goto_first_change` | Goto first change | normal: `` [G ``, select: `` [G `` |
-| `goto_last_change` | Goto last change | normal: `` ]G ``, select: `` ]G `` |
+| `goto_first_diag` | Goto first diagnostic | normal: `` jD ``, select: `` jD `` |
+| `goto_last_diag` | Goto last diagnostic | normal: `` kD ``, select: `` kD `` |
+| `goto_next_diag` | Goto next diagnostic | normal: `` kd ``, select: `` kd `` |
+| `goto_prev_diag` | Goto previous diagnostic | normal: `` jd ``, select: `` jd `` |
+| `goto_next_change` | Goto next change | normal: `` kg ``, select: `` kg `` |
+| `goto_prev_change` | Goto previous change | normal: `` jg ``, select: `` jg `` |
+| `goto_first_change` | Goto first change | normal: `` jG ``, select: `` jG `` |
+| `goto_last_change` | Goto last change | normal: `` kG ``, select: `` kG `` |
 | `goto_line_start` | Goto line start | normal: `` gh ``, `` <home> ``, select: `` gh ``, insert: `` <home> `` |
 | `goto_line_end` | Goto line end | normal: `` gl ``, `` <end> ``, select: `` gl `` |
 | `goto_column` | Goto column | normal: `` g\| `` |
@@ -204,7 +204,7 @@
 | `paste_primary_clipboard_before` | Paste primary clipboard before selections |  |
 | `indent` | Indent selection | normal: `` <gt> ``, select: `` <gt> `` |
 | `unindent` | Unindent selection | normal: `` <lt> ``, select: `` <lt> `` |
-| `format_selections` | Format selection | normal: `` = ``, select: `` = `` |
+| `format_selections` | Format selection | normal: `` ` ``, select: `` ` `` |
 | `join_selections` | Join lines inside selection | normal: `` J ``, select: `` J `` |
 | `join_selections_space` | Join lines inside selection and select spaces | normal: `` <A-J> ``, select: `` <A-J> `` |
 | `keep_selections` | Keep selections matching regex | normal: `` K ``, select: `` K `` |
@@ -222,19 +222,19 @@
 | `rotate_selection_contents_forward` | Rotate selection contents forward | normal: `` <A-)> ``, select: `` <A-)> `` |
 | `rotate_selection_contents_backward` | Rotate selections contents backward | normal: `` <A-(> ``, select: `` <A-(> `` |
 | `reverse_selection_contents` | Reverse selections contents |  |
-| `expand_selection` | Expand selection to parent syntax node | normal: `` <A-o> ``, `` <A-up> ``, select: `` <A-o> ``, `` <A-up> `` |
-| `shrink_selection` | Shrink selection to previously expanded syntax node | normal: `` <A-i> ``, `` <A-down> ``, select: `` <A-i> ``, `` <A-down> `` |
-| `select_next_sibling` | Select next sibling in the syntax tree | normal: `` <A-n> ``, `` <A-right> ``, select: `` <A-n> ``, `` <A-right> `` |
-| `select_prev_sibling` | Select previous sibling the in syntax tree | normal: `` <A-p> ``, `` <A-left> ``, select: `` <A-p> ``, `` <A-left> `` |
+| `expand_selection` | Expand selection to parent syntax node | normal: `` <up> ``, select: `` <up> `` |
+| `shrink_selection` | Shrink selection to previously expanded syntax node | normal: `` <down> ``, select: `` <down> `` |
+| `select_next_sibling` | Select next sibling in the syntax tree | normal: `` <right> ``, select: `` <right> `` |
+| `select_prev_sibling` | Select previous sibling the in syntax tree | normal: `` <left> ``, select: `` <left> `` |
 | `select_all_siblings` | Select all siblings of the current node | normal: `` <A-a> ``, select: `` <A-a> `` |
-| `select_all_children` | Select all children of the current node | normal: `` <A-I> ``, `` <S-A-down> ``, select: `` <A-I> ``, `` <S-A-down> `` |
+| `select_all_children` | Select all children of the current node | normal: `` <S-down> ``, select: `` <S-down> `` |
 | `jump_forward` | Jump forward on jumplist | normal: `` <C-i> ``, `` <tab> ``, select: `` <C-i> ``, `` <tab> `` |
 | `jump_backward` | Jump backward on jumplist | normal: `` <C-o> ``, select: `` <C-o> `` |
 | `save_selection` | Save current selection to jumplist | normal: `` <C-s> ``, select: `` <C-s> `` |
-| `jump_view_right` | Jump to right split | normal: `` <C-w>l ``, `` <space>wl ``, `` <C-w><C-l> ``, `` <C-w><right> ``, `` <space>w<C-l> ``, `` <space>w<right> ``, select: `` <C-w>l ``, `` <space>wl ``, `` <C-w><C-l> ``, `` <C-w><right> ``, `` <space>w<C-l> ``, `` <space>w<right> `` |
-| `jump_view_left` | Jump to left split | normal: `` <C-w>h ``, `` <space>wh ``, `` <C-w><C-h> ``, `` <C-w><left> ``, `` <space>w<C-h> ``, `` <space>w<left> ``, select: `` <C-w>h ``, `` <space>wh ``, `` <C-w><C-h> ``, `` <C-w><left> ``, `` <space>w<C-h> ``, `` <space>w<left> `` |
-| `jump_view_up` | Jump to split above | normal: `` <C-w>k ``, `` <C-w><up> ``, `` <space>wk ``, `` <C-w><C-k> ``, `` <space>w<up> ``, `` <space>w<C-k> ``, select: `` <C-w>k ``, `` <C-w><up> ``, `` <space>wk ``, `` <C-w><C-k> ``, `` <space>w<up> ``, `` <space>w<C-k> `` |
-| `jump_view_down` | Jump to split below | normal: `` <C-w>j ``, `` <space>wj ``, `` <C-w><C-j> ``, `` <C-w><down> ``, `` <space>w<C-j> ``, `` <space>w<down> ``, select: `` <C-w>j ``, `` <space>wj ``, `` <C-w><C-j> ``, `` <C-w><down> ``, `` <space>w<C-j> ``, `` <space>w<down> `` |
+| `jump_view_right` | Jump to right split | normal: `` <C-w># ``, `` <space>w# ``, `` <C-w><C-#> ``, `` <C-w><right> ``, `` <space>w<C-#> ``, `` <space>w<right> ``, select: `` <C-w># ``, `` <space>w# ``, `` <C-w><C-#> ``, `` <C-w><right> ``, `` <space>w<C-#> ``, `` <space>w<right> `` |
+| `jump_view_left` | Jump to left split | normal: `` <C-w>ö ``, `` <space>wö ``, `` <C-w><C-ö> ``, `` <C-w><left> ``, `` <space>w<C-ö> ``, `` <space>w<left> ``, select: `` <C-w>ö ``, `` <space>wö ``, `` <C-w><C-ö> ``, `` <C-w><left> ``, `` <space>w<C-ö> ``, `` <space>w<left> `` |
+| `jump_view_up` | Jump to split above | normal: `` <C-w>ü ``, `` <C-w><up> ``, `` <space>wü ``, `` <C-w><C-ü> ``, `` <space>w<up> ``, `` <space>w<C-ü> ``, select: `` <C-w>ü ``, `` <C-w><up> ``, `` <space>wü ``, `` <C-w><C-ü> ``, `` <space>w<up> ``, `` <space>w<C-ü> `` |
+| `jump_view_down` | Jump to split below | normal: `` <C-w>ä ``, `` <space>wä ``, `` <C-w><C-ä> ``, `` <C-w><down> ``, `` <space>w<C-ä> ``, `` <space>w<down> ``, select: `` <C-w>ä ``, `` <space>wä ``, `` <C-w><C-ä> ``, `` <C-w><down> ``, `` <space>w<C-ä> ``, `` <space>w<down> `` |
 | `swap_view_right` | Swap with right split | normal: `` <C-w>L ``, `` <space>wL ``, select: `` <C-w>L ``, `` <space>wL `` |
 | `swap_view_left` | Swap with left split | normal: `` <C-w>H ``, `` <space>wH ``, select: `` <C-w>H ``, `` <space>wH `` |
 | `swap_view_up` | Swap with split above | normal: `` <C-w>K ``, `` <space>wK ``, select: `` <C-w>K ``, `` <space>wK `` |
@@ -255,30 +255,30 @@
 | `align_view_top` | Align view top | normal: `` Zt ``, `` zt ``, select: `` Zt ``, `` zt `` |
 | `align_view_center` | Align view center | normal: `` Zc ``, `` Zz ``, `` zc ``, `` zz ``, select: `` Zc ``, `` Zz ``, `` zc ``, `` zz `` |
 | `align_view_bottom` | Align view bottom | normal: `` Zb ``, `` zb ``, select: `` Zb ``, `` zb `` |
-| `scroll_up` | Scroll view up | normal: `` Zk ``, `` zk ``, `` Z<up> ``, `` z<up> ``, select: `` Zk ``, `` zk ``, `` Z<up> ``, `` z<up> `` |
-| `scroll_down` | Scroll view down | normal: `` Zj ``, `` zj ``, `` Z<down> ``, `` z<down> ``, select: `` Zj ``, `` zj ``, `` Z<down> ``, `` z<down> `` |
+| `scroll_up` | Scroll view up | normal: `` Zü ``, `` zü ``, select: `` Zü ``, `` zü `` |
+| `scroll_down` | Scroll view down | normal: `` Zä ``, `` zä ``, select: `` Zä ``, `` zä `` |
 | `match_brackets` | Goto matching bracket | normal: `` mm ``, select: `` mm `` |
 | `surround_add` | Surround add | normal: `` ms ``, select: `` ms `` |
 | `surround_replace` | Surround replace | normal: `` mr ``, select: `` mr `` |
 | `surround_delete` | Surround delete | normal: `` md ``, select: `` md `` |
 | `select_textobject_around` | Select around object | normal: `` ma ``, select: `` ma `` |
 | `select_textobject_inner` | Select inside object | normal: `` mi ``, select: `` mi `` |
-| `goto_next_function` | Goto next function | normal: `` ]f ``, select: `` ]f `` |
-| `goto_prev_function` | Goto previous function | normal: `` [f ``, select: `` [f `` |
-| `goto_next_class` | Goto next type definition | normal: `` ]t ``, select: `` ]t `` |
-| `goto_prev_class` | Goto previous type definition | normal: `` [t ``, select: `` [t `` |
-| `goto_next_parameter` | Goto next parameter | normal: `` ]a ``, select: `` ]a `` |
-| `goto_prev_parameter` | Goto previous parameter | normal: `` [a ``, select: `` [a `` |
-| `goto_next_comment` | Goto next comment | normal: `` ]c ``, select: `` ]c `` |
-| `goto_prev_comment` | Goto previous comment | normal: `` [c ``, select: `` [c `` |
-| `goto_next_test` | Goto next test | normal: `` ]T ``, select: `` ]T `` |
-| `goto_prev_test` | Goto previous test | normal: `` [T ``, select: `` [T `` |
-| `goto_next_xml_element` | Goto next (X)HTML element | normal: `` ]x ``, select: `` ]x `` |
-| `goto_prev_xml_element` | Goto previous (X)HTML element | normal: `` [x ``, select: `` [x `` |
-| `goto_next_entry` | Goto next pairing | normal: `` ]e ``, select: `` ]e `` |
-| `goto_prev_entry` | Goto previous pairing | normal: `` [e ``, select: `` [e `` |
-| `goto_next_paragraph` | Goto next paragraph | normal: `` ]p ``, select: `` ]p `` |
-| `goto_prev_paragraph` | Goto previous paragraph | normal: `` [p ``, select: `` [p `` |
+| `goto_next_function` | Goto next function | normal: `` kf ``, select: `` kf `` |
+| `goto_prev_function` | Goto previous function | normal: `` jf ``, select: `` jf `` |
+| `goto_next_class` | Goto next type definition | normal: `` kt ``, select: `` kt `` |
+| `goto_prev_class` | Goto previous type definition | normal: `` jt ``, select: `` jt `` |
+| `goto_next_parameter` | Goto next parameter | normal: `` ka ``, select: `` ka `` |
+| `goto_prev_parameter` | Goto previous parameter | normal: `` ja ``, select: `` ja `` |
+| `goto_next_comment` | Goto next comment | normal: `` kc ``, select: `` kc `` |
+| `goto_prev_comment` | Goto previous comment | normal: `` jc ``, select: `` jc `` |
+| `goto_next_test` | Goto next test | normal: `` kT ``, select: `` kT `` |
+| `goto_prev_test` | Goto previous test | normal: `` jT ``, select: `` jT `` |
+| `goto_next_xml_element` | Goto next (X)HTML element | normal: `` kx ``, select: `` kx `` |
+| `goto_prev_xml_element` | Goto previous (X)HTML element | normal: `` jx ``, select: `` jx `` |
+| `goto_next_entry` | Goto next pairing | normal: `` ke ``, select: `` ke `` |
+| `goto_prev_entry` | Goto previous pairing | normal: `` je ``, select: `` je `` |
+| `goto_next_paragraph` | Goto next paragraph | normal: `` kp ``, select: `` kp `` |
+| `goto_prev_paragraph` | Goto previous paragraph | normal: `` jp ``, select: `` jp `` |
 | `dap_launch` | Launch debug target | normal: `` <space>Gl ``, select: `` <space>Gl `` |
 | `dap_restart` | Restart debugging session | normal: `` <space>Gr ``, select: `` <space>Gr `` |
 | `dap_toggle_breakpoint` | Toggle breakpoint | normal: `` <space>Gb ``, select: `` <space>Gb `` |

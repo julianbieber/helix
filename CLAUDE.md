@@ -50,8 +50,8 @@ mdbook serve book
 
 ## Rust Toolchain
 
-- Pinned to Rust **1.90.0** via `rust-toolchain.toml`
-- MSRV (Minimum Supported Rust Version): **1.87** — avoid using features newer than this
+- Pinned to Rust **1.96.0** via `rust-toolchain.toml`
+- MSRV (Minimum Supported Rust Version): **1.96** — avoid using features newer than this
 - The MSRV is tracked in three places: `Cargo.toml` (rust-version), `.github/workflows/build.yml` (env.MSRV), and `rust-toolchain.toml`
 
 ## Debugging

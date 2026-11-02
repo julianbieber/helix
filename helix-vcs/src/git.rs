@@ -1,6 +1,7 @@
 use anyhow::{bail, Context, Result};
 use arc_swap::ArcSwap;
 use gix::filter::plumbing::driver::apply::Delay;
+use gix::filter::plumbing::pipeline::convert::to_worktree::Options as ToWorktreeOptions;
 use std::io::Read;
 use std::path::Path;
 use std::sync::Arc;
@@ -69,10 +70,16 @@ pub fn get_diff_base(file: &Path, trust_full: bool) -> Result<Vec<u8>> {
     // trust level instead of letting gix re-derive it from `.git` ownership; see the note there.
     if let Some(work_dir) = repo.workdir() {
         let rela_path = file.strip_prefix(work_dir)?;
-        let rela_path = gix::path::try_into_bstr(rela_path)?;
+        let rela_path = gix::path::into_bstr(rela_path)?;
         let (mut pipeline, _) = repo.filter_pipeline(None)?;
-        let mut worktree_outcome =
-            pipeline.convert_to_worktree(&data, rela_path.as_ref(), Delay::Forbid)?;
+        let mut worktree_outcome = pipeline.convert_to_worktree(
+            &data,
+            rela_path.as_ref(),
+            ToWorktreeOptions {
+                can_delay: Delay::Forbid,
+                ..Default::default()
+            },
+        )?;
         let mut buf = Vec::with_capacity(data.len());
         worktree_outcome.read_to_end(&mut buf)?;
         Ok(buf)
@@ -139,9 +146,9 @@ pub fn for_each_changed_file(
             };
             seen.insert(path);
             if f(Ok(file_change)) {
-                Ok::<_, std::convert::Infallible>(std::ops::ControlFlow::Continue(()))
+                Ok::<_, gix::Error>(std::ops::ControlFlow::Continue(()))
             } else {
-                Ok::<_, std::convert::Infallible>(std::ops::ControlFlow::Break(()))
+                Ok::<_, gix::Error>(std::ops::ControlFlow::Break(()))
             }
         })?;
 

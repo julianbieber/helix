@@ -122,7 +122,7 @@ impl Snippet {
             dst: snippet,
             src: self,
             indent,
-            text: Tendril::new(),
+            text: Tendril::default(),
             off: pos,
             ctx,
             at_newline,
