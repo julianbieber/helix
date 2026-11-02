@@ -129,6 +129,16 @@ impl Preview<'_, '_> {
     }
 }
 
+fn redraw_notify() -> Arc<dyn Fn() + Sync + Send> {
+    match tokio::runtime::Handle::try_current() {
+        Ok(runtime) => Arc::new(move || {
+            let _runtime = runtime.enter();
+            helix_event::request_redraw();
+        }),
+        Err(_) => Arc::new(helix_event::request_redraw),
+    }
+}
+
 fn inject_nucleo_item<T, D>(
     injector: &nucleo::Injector<T>,
     columns: &[Column<T, D>],
@@ -279,12 +289,7 @@ impl<T: 'static + Send + Sync, D: 'static + Send + Sync> Picker<T, D> {
         let columns: Arc<[_]> = columns.into_iter().collect();
         let matcher_columns = columns.iter().filter(|col| col.filter).count() as u32;
         assert!(matcher_columns > 0);
-        let matcher = Nucleo::new(
-            Config::DEFAULT,
-            Arc::new(helix_event::request_redraw),
-            None,
-            matcher_columns,
-        );
+        let matcher = Nucleo::new(Config::DEFAULT, redraw_notify(), None, matcher_columns);
         let streamer = Injector {
             dst: matcher.injector(),
             columns,
@@ -314,12 +319,7 @@ impl<T: 'static + Send + Sync, D: 'static + Send + Sync> Picker<T, D> {
             .filter(|col: &&Column<T, D>| col.filter)
             .count() as u32;
         assert!(matcher_columns > 0);
-        let matcher = Nucleo::new(
-            Config::DEFAULT,
-            Arc::new(helix_event::request_redraw),
-            None,
-            matcher_columns,
-        );
+        let matcher = Nucleo::new(Config::DEFAULT, redraw_notify(), None, matcher_columns);
         let injector = matcher.injector();
         for item in options {
             inject_nucleo_item(&injector, &columns, item, &editor_data);
