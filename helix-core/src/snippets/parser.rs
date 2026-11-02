@@ -115,7 +115,7 @@ fn text<'a>(
 ) -> impl Parser<'a, Output = Tendril> {
     move |input: &'a str| {
         let mut chars = input.char_indices().peekable();
-        let mut res = Tendril::new();
+        let mut res = Tendril::default();
         while let Some((i, c)) = chars.next() {
             match c {
                 '\\' => {
@@ -168,7 +168,7 @@ fn format<'a>() -> impl Parser<'a, Output = FormatItem> {
         // '${' int ':+' if '}'
         map(
             seq!("${", digit(), ":+", text(TEXT_ESCAPE_CHARS, &['}']), "}"),
-            |seq| { Conditional(seq.1, seq.3, Tendril::new()) }
+            |seq| { Conditional(seq.1, seq.3, Tendril::default()) }
         ),
         // '${' int ':?' if ':' else '}'
         map(
@@ -193,7 +193,7 @@ fn format<'a>() -> impl Parser<'a, Output = FormatItem> {
                 text(TEXT_ESCAPE_CHARS, &['}']),
                 "}"
             ),
-            |seq| { Conditional(seq.1, Tendril::new(), seq.4) }
+            |seq| { Conditional(seq.1, Tendril::default(), seq.4) }
         ),
     )
 }
@@ -510,7 +510,7 @@ mod test {
                     transform: Some(Transform {
                         regex: "(.*).+$".into(),
                         replacement: vec![FormatItem::Capture(1), FormatItem::Text("$".into())],
-                        options: Tendril::new(),
+                        options: Tendril::default(),
                     }),
                 }]
             }),
@@ -685,9 +685,9 @@ mod test {
             &[Variable {
                 name: "foo".into(),
                 transform: Some(Transform {
-                    regex: Tendril::new(),
+                    regex: Tendril::default(),
                     replacement: Vec::new(),
-                    options: Tendril::new(),
+                    options: Tendril::default(),
                 }),
                 default: None,
             }],
@@ -711,7 +711,7 @@ mod test {
                 transform: Some(Transform {
                     regex: "([A-Z][a-z])".into(),
                     replacement: vec![FormatItem::Text("format".into())],
-                    options: Tendril::new(),
+                    options: Tendril::default(),
                 }),
                 default: None,
             }],
@@ -757,7 +757,11 @@ mod test {
                 name: "foo".into(),
                 transform: Some(Transform {
                     regex: ".*".into(),
-                    replacement: vec![FormatItem::Conditional(0, Tendril::new(), "fooo".into())],
+                    replacement: vec![FormatItem::Conditional(
+                        0,
+                        Tendril::default(),
+                        "fooo".into(),
+                    )],
                     options: "i".into(),
                 }),
                 default: None,
@@ -811,7 +815,7 @@ mod test {
                     regex: ".*".into(),
                     replacement: vec![
                         FormatItem::Text("complex".into()),
-                        FormatItem::Conditional(1, Tendril::new(), "else".into()),
+                        FormatItem::Conditional(1, Tendril::default(), "else".into()),
                     ],
                     options: "i".into(),
                 }),
@@ -826,7 +830,7 @@ mod test {
                     regex: ".*".into(),
                     replacement: vec![
                         FormatItem::Text("complex".into()),
-                        FormatItem::Conditional(1, Tendril::new(), "else".into()),
+                        FormatItem::Conditional(1, Tendril::default(), "else".into()),
                     ],
                     options: "i".into(),
                 }),
@@ -841,7 +845,7 @@ mod test {
                     regex: ".*".into(),
                     replacement: vec![
                         FormatItem::Text("complex".into()),
-                        FormatItem::Conditional(1, "if".into(), Tendril::new()),
+                        FormatItem::Conditional(1, "if".into(), Tendril::default()),
                     ],
                     options: "i".into(),
                 }),
@@ -885,7 +889,7 @@ mod test {
                 transform: Some(Transform {
                     regex: "src/".into(),
                     replacement: vec![FormatItem::Capture(1)],
-                    options: Tendril::new(),
+                    options: Tendril::default(),
                 }),
                 default: None,
             }],

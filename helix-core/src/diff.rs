@@ -42,7 +42,7 @@ impl ChangeSetBuilder<'_> {
                 .map(|&it| self.file.interner[it].len_chars())
                 .sum();
             self.res.delete(remove);
-            let mut fragment = Tendril::new();
+            let mut fragment = Tendril::default();
             if len_after > 500 {
                 // copying a rope line by line is slower then copying the entire
                 // rope. Use to_string for very large changes instead..

@@ -3,7 +3,7 @@ use crate::Tendril;
 // todo: should this be grapheme aware?
 
 pub fn to_pascal_case(text: impl Iterator<Item = char>) -> Tendril {
-    let mut res = Tendril::new();
+    let mut res = Tendril::default();
     to_pascal_case_with(text, &mut res);
     res
 }
@@ -42,7 +42,7 @@ pub fn to_lower_case_with(text: impl Iterator<Item = char>, buf: &mut Tendril) {
 }
 
 pub fn to_camel_case(text: impl Iterator<Item = char>) -> Tendril {
-    let mut res = Tendril::new();
+    let mut res = Tendril::default();
     to_camel_case_with(text, &mut res);
     res
 }

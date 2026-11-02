@@ -322,7 +322,7 @@ impl Transform {
     }
 
     pub fn apply(&self, mut doc: RopeSlice<'_>, range: Range) -> Tendril {
-        let mut buf = Tendril::new();
+        let mut buf = Tendril::default();
         let it = self.regex.captures_iter(doc.regex_input_at(range));
         doc = doc.slice(range);
         let mut last_match = 0;

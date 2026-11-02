@@ -144,6 +144,15 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "37b2a672a2cb129a2e41c10b1224bb368f9f37a2b16b612598138befd7b37eb5"
 
 [[package]]
+name = "castaway"
+version = "0.2.4"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "dec551ab6e7578819132c713a93c022a05d60159dc86e7a7050223577484c55a"
+dependencies = [
+ "rustversion",
+]
+
+[[package]]
 name = "cc"
 version = "1.2.65"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -245,6 +254,19 @@ name = "clru"
 version = "0.6.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "cbd0f76e066e64fdc5631e3bb46381254deab9ef1158292f27c8c57e3bf3fe59"
+
+[[package]]
+name = "compact_str"
+version = "0.10.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "79fcda08c33bb58b97008b2cdada6622500e949e060f5913361763121abd2416"
+dependencies = [
+ "castaway",
+ "cfg-if",
+ "itoa",
+ "static_assertions",
+ "zmij",
+]
 
 [[package]]
 name = "const-oid"
@@ -1518,6 +1540,7 @@ dependencies = [
  "arc-swap",
  "bitflags",
  "chrono",
+ "compact_str",
  "encoding_rs",
  "foldhash 0.2.0",
  "globset",
@@ -1537,7 +1560,6 @@ dependencies = [
  "serde_json",
  "slotmap",
  "smallvec",
- "smartstring",
  "textwrap",
  "toml",
  "tree-house",
@@ -1750,6 +1772,7 @@ dependencies = [
  "bitflags",
  "chardetng",
  "clipboard-win",
+ "compact_str",
  "criterion",
  "crossterm",
  "foldhash 0.2.0",
@@ -1762,7 +1785,6 @@ dependencies = [
  "helix-stdx",
  "helix-tui",
  "helix-vcs",
- "kstring",
  "libc",
  "log",
  "parking_lot",
@@ -2660,17 +2682,6 @@ name = "smallvec"
 version = "1.15.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "8ed6a63f02c8539c91a8685a86f4099661ba3da017932f6ebbea6de3f0fa7c90"
-
-[[package]]
-name = "smartstring"
-version = "1.0.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "3fb72c633efbaa2dd666986505016c32c3044395ceaf881518399d2f4127ee29"
-dependencies = [
- "autocfg",
- "static_assertions",
- "version_check",
-]
 
 [[package]]
 name = "smawk"

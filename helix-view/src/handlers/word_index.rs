@@ -167,7 +167,7 @@ const MAX_WORD_LEN: usize = 50;
 /// Number of words to index between checks of the cancellation handle.
 const CANCEL_CHECK_INTERVAL: usize = 4096;
 
-type Word = kstring::KString;
+type Word = compact_str::CompactString;
 
 #[derive(Debug, Default)]
 struct WordIndexInner {
@@ -190,8 +190,8 @@ impl WordIndexInner {
             *rc = rc.saturating_add(1);
         } else {
             let word = match word {
-                Cow::Owned(s) => Word::from_string(s),
-                Cow::Borrowed(s) => Word::from_ref(s),
+                Cow::Owned(s) => Word::from(s),
+                Cow::Borrowed(s) => Word::from(s),
             };
             self.words.insert(word, 1);
         }
