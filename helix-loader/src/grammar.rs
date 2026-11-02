@@ -597,9 +597,7 @@ fn build_tree_sitter_library(
     let compiler = config.get_compiler();
     let mut command = Command::new(compiler.path());
     command.current_dir(src_path);
-    for (key, value) in compiler.env() {
-        command.env(key, value);
-    }
+    command.envs(compiler.get_envs());
 
     command.args(compiler.args());
     // used to delay dropping the temporary object file until after the compilation is complete
@@ -617,9 +615,7 @@ fn build_tree_sitter_library(
             } else {
                 let mut cpp_command = Command::new(compiler.path());
                 cpp_command.current_dir(src_path);
-                for (key, value) in compiler.env() {
-                    cpp_command.env(key, value);
-                }
+                cpp_command.envs(compiler.get_envs());
                 cpp_command.args(compiler.args());
                 let object_file =
                     library_path.with_file_name(format!("{}_scanner.obj", &grammar.grammar_id));
@@ -669,9 +665,7 @@ fn build_tree_sitter_library(
             } else {
                 let mut cpp_command = Command::new(compiler.path());
                 cpp_command.current_dir(src_path);
-                for (key, value) in compiler.env() {
-                    cpp_command.env(key, value);
-                }
+                cpp_command.envs(compiler.get_envs());
                 cpp_command.args(compiler.args());
                 let object_file =
                     library_path.with_file_name(format!("{}_scanner.o", &grammar.grammar_id));
