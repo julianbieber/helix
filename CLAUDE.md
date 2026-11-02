@@ -135,7 +135,7 @@ Test helpers are in `helix-term/tests/test/helpers.rs`. The `.cargo/config.toml`
 
 ## This Fork: Installing on a Machine
 
-This checkout (branch `custom`) owns everything needed to build and configure `hx`.
+This checkout (branch `main`) owns everything needed to build and configure `hx`.
 `just` lists the recipes. On a new machine, `just install` builds the binary,
 installs the config and builds the grammars.
 
