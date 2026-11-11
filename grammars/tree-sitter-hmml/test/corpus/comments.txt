@@ -1,0 +1,29 @@
+====================
+comments at column 0
+====================
+
+# a comment
+#
+repo: x
+
+## intent
+# inside a section
+  - a bullet
+
+---
+
+(source_file
+  (comment)
+  (comment)
+  (header_line
+    (header_key)
+    (header_value))
+  (intent_section
+    (section_header
+      (section_name))
+    (comment)
+    (context_line
+      (gutter_context)
+      (step
+        (bullet)
+        (prose)))))

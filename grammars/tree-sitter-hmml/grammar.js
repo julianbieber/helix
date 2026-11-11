@@ -1,343 +1,354 @@
 /**
- * @file Tree-sitter grammar for HMML (the hobby Mental Model Language dialect) —
- *   syntax highlighting only. Semantics (diagnostics, references, …) live in the
- *   `hobby-mml-lsp` server; this grammar exists purely so an editor can colour a
- *   `.hmml` spec. It is deliberately loose: it recognises the shape of each line
- *   well enough to assign highlight groups, not to fully validate the language.
+ * @file Tree-sitter grammar for HMML v3 (the hobby Mental Model Language, the
+ *   review delta of one PR) — syntax highlighting only. Diagnostics and every
+ *   other check live in `hobby-mml-parser` / `hobby-mml-lsp`; this grammar
+ *   recognises the shape of each line well enough to assign highlight groups
+ *   and is deliberately loose about what the spec rejects (section order,
+ *   nesting, annotation order, whether a role or a schedule is right).
  *
- *   Forked from the work `tree-sitter-mml`, which HMML used to borrow via
- *   `grammar = "mml"`. That borrow meant highlighting only worked on a machine
- *   with the work checkout. This copy lives in the Helix fork, so every machine
- *   has it — and, being ours, it covers the v2 sections (`## components`,
- *   `## systems`, `## access`) that the v1 grammar rejects outright.
- *
- *   HMML is line-oriented, so `\n` is deliberately NOT an extra: one line is one
- *   item. Keeping the newline significant is what stops a malformed line from
- *   swallowing the rest of the file into a single ERROR node — the parser
- *   resynchronises at the next line break.
- *
- *   Known limit: `prose`/`path`/`continuation` stop at `@` (so `@ spec`
- *   annotations lex as their own nodes); a literal mid-prose `@` not starting an
- *   annotation produces a local ERROR node, which is acceptable for colouring.
+ *   The grammar is line-oriented and has no `extras`: every space is part of a
+ *   token, so column 0 is always the token right after a newline. That is what
+ *   lets the context gutter (a single space) be a token of its own. Every line
+ *   ends in a newline token; tree-sitter recovers an unterminated last line by
+ *   inserting a zero-width one.
  * @license MIT
  */
 
 /// <reference types="tree-sitter-cli/dsl" />
 // @ts-check
 
-function sepBy1(sep, rule) {
-  return seq(rule, repeat(seq(sep, rule)));
+const padded = (re) => token(new RegExp(`[ \\t]*${re}[ \\t]*`));
+
+const GUTTERS = ["added", "removed", "changed", "context"];
+const CONTENTS = ["step", "data", "api", "tests"];
+
+/**
+ * The line rules `_<content>_<gutter>_line`: a gutter, then optionally the
+ * content indented under it, then the newline. Each is aliased to
+ * `<gutter>_line` where it is used, so every section shares the four line node
+ * types while holding its own content.
+ */
+function lineRules() {
+  /** @type {Record<string, ($: GrammarSymbols<string>) => RuleOrLiteral>} */
+  const rules = {};
+  for (const content of CONTENTS) {
+    for (const gutter of GUTTERS) {
+      rules[`_${content}_${gutter}_line`] = ($) =>
+        seq(
+          $[`gutter_${gutter}`],
+          optional(seq(optional($._ws), $[`_${content}_content`])),
+          $._nl,
+        );
+    }
+  }
+  return rules;
 }
-function sepBy(sep, rule) {
-  return optional(sepBy1(sep, rule));
+
+/**
+ * A section: its header line, then blank, comment and body lines.
+ * @param {GrammarSymbols<string>} $
+ * @param {string} head the header rule
+ * @param {string} content the content kind of its body lines
+ */
+function section($, head, content) {
+  return seq(
+    alias($[head], $.section_header),
+    $._nl,
+    repeat(
+      choice(
+        $._nl,
+        $._comment_line,
+        ...GUTTERS.map((g) => alias($[`_${content}_${g}_line`], $[`${g}_line`])),
+      ),
+    ),
+  );
+}
+
+/**
+ * `## <name>` for a section whose header carries nothing else.
+ * @param {GrammarSymbols<string>} $
+ * @param {string} name
+ */
+function sectionHead($, name) {
+  return seq("##", $._ws, field("kind", alias(name, $.section_name)));
 }
 
 module.exports = grammar({
   name: "hmml",
 
-  word: ($) => $.identifier,
-
-  // Horizontal whitespace only. Newlines carry meaning (see the file comment),
-  // and indentation is skipped — an item's meaning comes from its first token,
-  // never from how deeply it is nested.
-  extras: ($) => [/[ \t]/],
+  extras: (_) => [],
 
   rules: {
-    // Blank lines and the newline ending each item are the only place `_newline`
-    // is consumed at top level; `continuation` (below) is the one token allowed
-    // to reach across one.
-    source_file: ($) => repeat(choice($._newline, $._item)),
+    source_file: ($) =>
+      seq(
+        repeat(choice($._nl, $._comment_line, $.header_line)),
+        repeat($._section),
+      ),
 
-    _newline: ($) => token(/\r?\n/),
 
-    _item: ($) =>
+    _nl: (_) => token(/[ \t]*\r?\n/),
+    _ws: (_) => token(/[ \t]+/),
+
+    comment: (_) => token(/#([ \t][^\r\n]*)?/),
+    _comment_line: ($) => seq($.comment, $._nl),
+
+    gutter_added: (_) => "+",
+    gutter_removed: (_) => "-",
+    gutter_changed: (_) => "~",
+    gutter_context: (_) => " ",
+
+    identifier: (_) => /[A-Za-z_][A-Za-z0-9_]*/,
+    number: (_) => /[0-9]+/,
+
+    prose: (_) =>
+      token(prec(-1, /([^\r\n@^→]|@[^ \t\r\n]|\^[^a-z\r\n])+/)),
+
+    separator: (_) => padded("(—|--)"),
+    arrow: (_) => padded("→"),
+
+
+    header_line: ($) =>
+      seq(
+        field("key", alias($.identifier, $.header_key)),
+        alias(padded(":"), ":"),
+        optional(field("value", alias(/[^\r\n]+/, $.header_value))),
+        $._nl,
+      ),
+
+
+    _section: ($) =>
       choice(
-        $.change_added,
-        $.change_removed,
-        $.comment,
-        $.section_header,
-        $.io_declaration,
-        $.use_import,
-        $.type_definition,
-        $.marker_declaration,
-        $.module_entry,
-        $.api_entry,
-        $.where_clause,
-        $.access_entry,
-        $.binding,
-        $.field,
+        $.intent_section,
+        $.data_section,
+        $.unit_section,
+        $.api_section,
+        $.tests_section,
+        $.other_section,
+      ),
+
+    intent_section: ($) => section($, "_intent_head", "step"),
+    data_section: ($) => section($, "_data_head", "data"),
+    unit_section: ($) => section($, "_unit_head", "step"),
+    api_section: ($) => section($, "_api_head", "api"),
+    tests_section: ($) => section($, "_tests_head", "tests"),
+    other_section: ($) => section($, "_other_head", "step"),
+
+    _intent_head: ($) => sectionHead($, "intent"),
+    _data_head: ($) => sectionHead($, "data"),
+    _api_head: ($) => sectionHead($, "api"),
+    _tests_head: ($) => sectionHead($, "tests"),
+    _other_head: ($) =>
+      seq(
+        "##",
+        optional(seq($._ws, field("name", alias($.prose, $.section_name)))),
+      ),
+
+    _unit_head: ($) =>
+      seq(
+        "##",
+        $._ws,
+        field("kind", alias("unit", $.section_name)),
+        $._ws,
+        field("name", $.unit_name),
+        optional(seq($._ws, field("status", $.unit_status))),
+        optional(seq($._ws, field("trigger", $.unit_trigger))),
+        optional(
+          seq($.separator, optional($._text), optional($._annotations)),
+        ),
+      ),
+    unit_name: (_) => /[A-Za-z0-9_][A-Za-z0-9_.-]*/,
+    unit_status: (_) => choice("(new)", "(removed)"),
+    unit_trigger: ($) =>
+      seq(
+        alias(choice("in", "on"), $.trigger_keyword),
+        $._ws,
+        field("target", alias(/[A-Za-z_][^ \t\r\n]*/, $.trigger_target)),
+      ),
+
+
+    _step_content: ($) =>
+      choice($.step, $.invariants, seq($._text, optional($._annotations))),
+
+    step: ($) =>
+      seq(
         $.bullet,
+        optional($.keyword),
+        optional($._text),
+        optional($._annotations),
       ),
-
-    // A single `#` starts a comment; `##` is a section header (handled below).
-    // The rest of the line is optional so a bare `#` — used as a spacer in the
-    // `/hmml-new` templates — is a comment too. `##` still wins by being the
-    // longer match.
-    //
-    // The second form is a rule/divider line (`# --- x ---`, `# +++`): a repeated
-    // sign, matched at the highest precedence so it stays a comment instead of
-    // lexing as a change marker plus a stray bullet.
-    comment: ($) =>
-      choice(
-        token(seq("#", optional(seq(/[^#\r\n]/, /[^\r\n]*/)))),
-        token(prec(2, seq("#", /[ \t]*/, /[-+][-+]+[^\r\n]*/))),
-      ),
-
-    // Change annotations (grammar §10): `# +` marks the line beneath it (with
-    // that line's nested children) as added, and `# - <text>` is a baseline line
-    // this change removes, commented out in place. They are plain comments to
-    // the language — they get their own nodes here only so an editor can colour
-    // them like a diff. Each takes the whole line and outranks `comment`, which
-    // matches the same span.
-    change_added: ($) => token(prec(1, seq("#", /[ \t]*/, "+", /[^\r\n]*/))),
-    change_removed: ($) => token(prec(1, seq("#", /[ \t]*/, "-", /[^\r\n]*/))),
-
-    section_header: ($) =>
-      seq(
-        alias(token(/##+/), $.section_marker),
-        field("name", $.section_name),
-      ),
-    // The classic four (v1) plus the Bevy sections (v2, grammar.md §8) and the
-    // module dialect's `api` (§11). Which of these a given `kind:` may use is
-    // the LSP's business, not the grammar's.
-    section_name: ($) =>
-      choice(
-        "modules",
-        "data",
-        "behavior",
-        "api",
-        "invariants",
-        "components",
-        "resources",
-        "events",
-        "systems",
-        "access",
-      ),
-
-    // `in:` / `out:` name the unit's input/output type. Classic kinds only —
-    // a plugin or system passes data through the World instead.
-    io_declaration: ($) =>
-      seq(field("direction", choice("in", "out")), ":", field("type", $.type)),
-
-    // Type import: `use system/unit: Type, Type` (grammar §4.5). The ref reuses
-    // the `spec_ref` node (same shape/highlight as an `@ spec` target); the
-    // imported type names are plain identifiers after the `:`.
-    //
-    // `use extern crate::path: Type, …` (grammar §4.8) is the same line with a
-    // crate path in place of the spec ref. The `extern` keyword must be
-    // followed by a path token, so `use extern: Type` — an import from a unit
-    // that happens to be called `extern` — still matches the first branch.
-    use_import: ($) =>
-      seq(
-        "use",
-        choice(
-          seq(
-            field(
-              "ref",
-              alias(
-                token(
-                  prec(2, /[A-Za-z][A-Za-z0-9._-]*(\/[A-Za-z][A-Za-z0-9._-]*)?/),
-                ),
-                $.spec_ref,
-              ),
-            ),
-            ":",
-          ),
-          seq(
-            alias(token(prec(3, /extern[ \t]+/)), $.extern_keyword),
-            field("crate", $.crate_path),
-            ":",
+    bullet: (_) => token(/-[ \t]+/),
+    keyword: (_) =>
+      token(
+        prec(
+          2,
+          choice(
+            /if[ \t]/,
+            /else:/,
+            /for each[ \t]/,
+            /while[ \t]/,
+            /try:/,
+            /on error[ \t]/,
           ),
         ),
-        sepBy1(",", field("type", $.identifier)),
+      ),
+    invariants: ($) => seq("invariants:", optional($._text)),
+
+    _text: ($) => choice($.prose, $.change),
+    change: ($) =>
+      seq(
+        optional(field("old", alias($.prose, $.old_text))),
+        $.arrow,
+        optional(field("new", alias($.prose, $.new_text))),
       ),
 
-    // A `::`-separated Rust path, lexed immediately after the `extern` keyword
-    // (which swallows its own trailing whitespace) so it never competes with
-    // the `spec_ref` token of the other branch.
-    crate_path: ($) =>
-      token.immediate(prec(3, /[A-Za-z_][A-Za-z0-9_]*(::[A-Za-z_][A-Za-z0-9_]*)*/)),
+    _data_content: ($) =>
+      choice($.type_definition, $.member_line, alias(padded("}"), "}")),
 
-    // Header key/value: `system: …`, `unit: …`, `kind: …`, `repo: …`.
-    field: ($) =>
-      seq(field("key", $.identifier), ":", optional(field("value", $.value))),
-    value: ($) => token(prec(1, /[^\r\n]+/)),
-
-    // One line of a system's access block (grammar §8.3), whether indented under
-    // a `## systems` entry or unindented under `## access`. The key set is
-    // closed, which is what lets it highlight distinctly from a generic `field`;
-    // role-checking the value is the LSP's job.
-    access_entry: ($) =>
-      seq(field("key", $.access_key), ":", optional(field("value", $.value))),
-    access_key: ($) =>
-      choice(
-        "schedule",
-        "set",
-        "after",
-        "before",
-        "run_if",
-        "query",
-        "reads",
-        "writes",
-        "spawns",
-        "despawns",
-        "emits",
-        "consumes",
-      ),
-
-    // `struct`/`enum` block. Members are treated uniformly (struct fields carry
-    // a `: Type`, enum variants do not) — good enough for colouring.
-    //
-    // Both the `@ <path>` and the body are optional (grammar §4.7): a type that
-    // references real code may name only the members it changes, or none at all.
     type_definition: ($) =>
       seq(
-        field("keyword", choice("struct", "enum")),
-        field("name", $.identifier),
-        optional(seq("@", field("path", $.type_path))),
+        optional(field("role", $.ecs_role)),
+        choice("struct", "enum"),
+        $._ws,
+        field("name", alias($.identifier, $.type_name)),
         optional(
           seq(
-            "{",
-            repeat(
-              choice(
-                $.member,
-                ",",
-                $._newline,
-                $.comment,
-                $.change_added,
-                $.change_removed,
-              ),
-            ),
-            "}",
+            alias(padded("\\{"), "{"),
+            optional($._members),
+            optional(alias(padded("}"), "}")),
           ),
         ),
+        optional($._change_tail),
+        optional($._annotations),
       ),
+    ecs_role: (_) =>
+      token(
+        seq(choice("component", "resource", "event", "message", "state"), /[ \t]+/),
+      ),
+    _members: ($) =>
+      seq($.member, repeat(seq($._comma, $.member)), optional($._comma)),
     member: ($) =>
       seq(
-        // `+` adds the member to the referenced type, `-` removes it; unmarked
-        // means "already there" (grammar §4.7).
-        optional(field("delta", $.delta)),
-        field("name", $.identifier),
-        optional(seq(":", field("type", $.type))),
-        // Optional endpoint parameter source: `field: Type @query` (grammar §4.1).
-        optional(seq("@", field("source", $.identifier))),
+        field("name", alias($.identifier, $.field_name)),
+        optional(seq($._colon, field("type", $.type))),
       ),
-    delta: ($) => token(prec(4, choice("+", "-"))),
-
-    // A type declaration's `@ <path>`. Unlike `path`, it must also stop at `{`,
-    // because a body may follow on the same line.
-    type_path: ($) => token(prec(2, /[^@{\r\n]+/)),
-
-    // `marker Name [@ <path>]` — a zero-sized component (grammar §8.1). Legal
-    // only in `## components`, which the LSP checks; here it is just a line
-    // shape.
-    marker_declaration: ($) =>
+    member_line: ($) =>
       seq(
-        "marker",
-        field("name", $.identifier),
-        optional(seq("@", field("path", $.type_path))),
+        $.member,
+        optional($._comma),
+        optional($._change_tail),
+        optional($._annotations),
       ),
 
     type: ($) =>
       seq(
-        field("name", $.identifier),
-        optional(seq("<", sepBy(",", $.type), ">")),
-      ),
-
-    // The `where:` marker opening the binding block (grammar §5.3). Its own rule
-    // (not a generic `field`) so its absent value can't swallow the first binding
-    // line across the newline.
-    where_clause: ($) => prec(2, seq("where", ":")),
-
-    // A `where:` binding: `Symbol = value [@ config-source]` (grammar §5.3).
-    binding: ($) =>
-      seq(
-        field("symbol", $.identifier),
-        "=",
-        optional(field("value", $.binding_value)),
-        optional(seq("@", field("config", $.path))),
-      ),
-    binding_value: ($) => token(prec(2, /[^@\r\n]+/)),
-
-    // `Name — responsibility [@ path] [@ spec ref]` (em dash or `--`). Also the
-    // shape of a `## systems` entry (grammar §8.2), which is a module line
-    // followed by an indented access block.
-    module_entry: ($) =>
-      seq(
-        field("name", $.identifier),
-        $.separator,
-        optional(field("responsibility", $.responsibility)),
-        optional(seq("@", field("path", $.path))),
-        optional($.spec_annotation),
-      ),
-    separator: ($) => token(choice("—", "--")),
-
-    // A module spec's public function (grammar §11):
-    // `fn [Type::]name(param: Type, …) [-> Type] [@ path] [@ spec ref]`.
-    // The bullets describing it are ordinary `bullet` items nested beneath.
-    api_entry: ($) =>
-      seq(
-        "fn",
-        optional(seq(field("receiver", $.identifier), "::")),
-        field("name", $.identifier),
-        "(",
-        sepBy(",", $.param),
-        ")",
-        optional(seq("->", field("return", $.type))),
-        optional(seq("@", field("path", $.path))),
-        optional($.spec_annotation),
-      ),
-    param: ($) => seq(field("name", $.identifier), ":", field("type", $.type)),
-    responsibility: ($) => token(prec(1, /[^@\r\n]+/)),
-    path: ($) => token(prec(1, /[^@\r\n]+/)),
-
-    // Cross-spec reference: `@ spec system/unit` or `@ spec unit` (grammar
-    // §5.4), optionally naming one member of it — `@ spec unit::function` or
-    // `@ spec unit::Type::method` (§11). The keyword token requires trailing
-    // whitespace and outranks the free-text tokens, so `@ spec_utils/x.py`
-    // still lexes as a `path`.
-    spec_annotation: ($) =>
-      seq(
-        "@",
-        alias(token(prec(2, /spec[ \t]+/)), $.spec_keyword),
-        field(
-          "target",
-          alias(
-            token.immediate(
-              prec(
-                2,
-                /[A-Za-z][A-Za-z0-9._-]*(\/[A-Za-z][A-Za-z0-9._-]*)?(::[A-Za-z_][A-Za-z0-9_]*){0,2}/,
-              ),
-            ),
-            $.spec_ref,
-          ),
+        field("name", alias($.identifier, $.type_name)),
+        optional(
+          seq("<", $.type, repeat(seq($._comma, $.type)), alias(padded(">"), ">")),
         ),
       ),
 
-    // Behavior / invariant bullet. Leading control-flow keyword is highlighted;
-    // the rest of the line is prose. The keyword token outranks `prose` so it
-    // wins at the start of a step.
-    bullet: ($) =>
+    _change_tail: ($) => seq($.arrow, optional(alias($.prose, $.new_text))),
+
+    _colon: (_) => alias(padded(":"), ":"),
+    _comma: (_) => alias(padded(","), ","),
+
+    _api_content: ($) => choice($.module_line, $.fn_entry),
+
+    module_line: ($) =>
       seq(
-        "-",
-        optional(choice($.control_flow, $.prose)),
-        optional($.spec_annotation),
-        repeat(seq($.continuation, optional($.spec_annotation))),
+        field("name", alias($.identifier, $.module_name)),
+        $.separator,
+        optional($._text),
+        optional($._annotations),
       ),
-    control_flow: ($) => seq(field("keyword", $.keyword), optional($.prose)),
-    keyword: ($) =>
-      token(
-        prec(3, choice("if", "while", "else", "try", "for each", "on error")),
+
+    fn_entry: ($) =>
+      seq(
+        "fn",
+        $._ws,
+        optional(
+          seq(field("receiver", alias($.identifier, $.type_name)), "::"),
+        ),
+        field("name", alias($.identifier, $.fn_name)),
+        optional(
+          seq(
+            alias(padded("\\("), "("),
+            optional(
+              seq($.param, repeat(seq($._comma, $.param)), optional($._comma)),
+            ),
+            alias(padded("\\)"), ")"),
+          ),
+        ),
+        optional(seq(alias(padded("->"), "->"), field("return", $.type))),
+        optional($._change_tail),
+        optional($._annotations),
       ),
-    prose: ($) => token(prec(1, /[^@\r\n]+/)),
+    param: ($) =>
+      seq(
+        field("name", alias($.identifier, $.param_name)),
+        $._colon,
+        field("type", $.type),
+      ),
 
-    // A bullet whose prose wraps onto the following line. The token swallows its
-    // own leading newline — that is what makes it unambiguous against the
-    // `_newline` that ends the bullet. It must be indented and must not start a
-    // new construct, so `- nested`, `## section`, `# comment` and a blank line
-    // all fail to match here and the shorter `_newline` wins instead.
-    continuation: ($) => token(/\r?\n[ \t]+[^-#@ \t\r\n][^@\r\n]*/),
+    _tests_content: ($) => choice($.test_entry, $.test_group),
 
-    identifier: ($) => /[A-Za-z_][A-Za-z0-9_]*/,
+    test_entry: ($) =>
+      seq(
+        "test",
+        $._ws,
+        field("name", alias($.identifier, $.test_name)),
+        $.separator,
+        optional($._text),
+        optional($._annotations),
+      ),
+    test_group: ($) =>
+      seq(
+        "tests",
+        $._ws,
+        field("count", alias($.number, $.test_count)),
+        $.separator,
+        optional($._text),
+        optional($._annotations),
+      ),
+
+    ...lineRules(),
+
+
+    _annotations: ($) =>
+      repeat1(
+        seq(
+          optional($._ws),
+          choice($.anchor, $.diff_link, $.api_ref, $.guards),
+        ),
+      ),
+
+    anchor: (_) => /\^[a-z][a-z0-9_]*/,
+
+    diff_link: ($) =>
+      seq(
+        alias(padded("@"), "@"),
+        field("path", $.path),
+        optional(seq(":", field("line", alias($.number, $.line_number)))),
+      ),
+    path: (_) => /[^ \t\r\n@:]+/,
+
+    api_ref: ($) =>
+      seq(
+        alias(token(/[ \t]*@[ \t]+api[ \t]+/), $.api_keyword),
+        $.api_target,
+        repeat(seq($._comma, $.api_target)),
+      ),
+    api_target: ($) =>
+      seq(
+        field("module", alias($.identifier, $.module_name)),
+        repeat1(seq("::", field("member", alias($.identifier, $.fn_name)))),
+      ),
+
+    guards: ($) =>
+      seq(
+        alias(token(/[ \t]*@[ \t]+guards[ \t]+/), $.guards_keyword),
+        $.anchor,
+        repeat(seq($._comma, $.anchor)),
+      ),
   },
 });

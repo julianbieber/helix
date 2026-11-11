@@ -5715,10 +5715,10 @@ comment-token = "#"
 indent = { tab-width = 2, unit = "  " }
 language-servers = ["mml-lsp"]
 
-# Hobby specs are `.hmml` and get the forked server, which resolves spec->source
-# against ~/fun_worktrees/<project>/<topic>/<task> rather than the work layout
-# ~/worktrees/<topic>/<task>/<repo>. `grammar = "mml"` reuses the tree-sitter
-# grammar the `mml` entry declares, so there is no second grammar to build.
+# Hobby review deltas are `.hmml` and get the forked server, which resolves diff
+# links against ~/fun_worktrees/<project>/<topic>/<task> rather than the work
+# layout. The grammar is grammars/tree-sitter-hmml, declared by
+# `just install-config`.
 [[language]]
 name = "hmml"
 scope = "source.hmml"
@@ -5730,7 +5730,7 @@ language-servers = ["hobby-mml-lsp"]
 
 # A repo's structure.hstruct — what layers it has, what each module owns, and
 # which violations of its own rules it accepts. Repo-scoped and long-lived,
-# unlike an .hmml spec, which describes one unit for one task.
+# unlike an .hmml delta, which describes one PR.
 [[language]]
 name = "hstruct"
 scope = "source.hstruct"

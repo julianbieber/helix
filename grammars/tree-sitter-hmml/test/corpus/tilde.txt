@@ -1,0 +1,51 @@
+====================================
+changed step with old and new halves
+====================================
+
+## unit u — a unit
+~ - check the Score → check the Purse @ waves.rs:94
+
+---
+
+(source_file
+  (unit_section
+    (section_header
+      (section_name)
+      (unit_name)
+      (separator)
+      (prose))
+    (changed_line
+      (gutter_changed)
+      (step
+        (bullet)
+        (change
+          (old_text)
+          (arrow)
+          (new_text))
+        (diff_link
+          (path)
+          (line_number))))))
+
+================================
+changed line with empty new half
+================================
+
+## unit u — a unit
+~ - keep the score →
+
+---
+
+(source_file
+  (unit_section
+    (section_header
+      (section_name)
+      (unit_name)
+      (separator)
+      (prose))
+    (changed_line
+      (gutter_changed)
+      (step
+        (bullet)
+        (change
+          (old_text)
+          (arrow))))))

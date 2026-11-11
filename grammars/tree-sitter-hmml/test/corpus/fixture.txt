@@ -1,0 +1,619 @@
+================
+the parser fixture delta-wave-bounties.hmml
+================
+
+repo:   bevy_survivor
+branch: wave-bounties
+base:   3a9c41e07b
+head:   c58d20f9a1
+pr:     https://github.com/example/bevy_survivor/pull/42
+
+## intent
+  - every enemy killed pays its bounty into the purse, and a wave cleared before its timer pays a bonus
+  - the shop spends from the purse instead of from the score
+
+## data
+  component struct Enemy {
+    health: f32,
+-   score_value: u32,
++   bounty: u32,
+    speed: f32,
+  }
++ event struct EnemyDied { enemy: Entity, bounty: u32, at: Vec3 }
++ resource struct Purse { coins: u32, earned_this_wave: u32 }
+  message struct WaveCleared {
+    wave: u32,
++   early: bool,
+  }
++ state enum Shop { closed, browsing }
+
+## unit spawn-wave in FixedUpdate — the wave director spawning enemies on the wave timer @ waves.rs:40
+  - tick the wave timer
+  - if the timer finished:
+    - spawn X enemies around the player at the wave's ring radius
+~   - give each Enemy a score value from the wave table → a bounty from the wave table ^bounty_from_table @ waves.rs:61 @ api WaveTable::bounty
+  - if no Enemy is left alive:
+~   - write WaveCleared → … with early set when the timer has not finished ^early_clear @ waves.rs:88
+-   - add the wave's score bonus to the Score @ waves.rs:96
+-     - flash the score text
++   - if the clear was early:
++     - credit the wave bonus to the Purse ^wave_bonus @ waves.rs:92 @ api Purse::credit, WaveTable::bonus
+    - start the next wave's timer
+  invariants:
+  - at most N enemies are alive at once
+  - a wave is cleared exactly once
++ - a wave bonus is paid only for a clear before the timer ran out ^bonus_only_early
+
+## unit pay-bounty (new) on EnemyDied — the observer paying an enemy's bounty when it dies @ bounty.rs:12
++ - credit the bounty to the Purse and add it to earned_this_wave @ bounty.rs:18 @ api Purse::credit
++ - spawn a coin burst where it died ^coin_burst @ bounty.rs:24
++ invariants:
++ - a dead enemy is paid for exactly once ^paid_once
+
+## unit buy-upgrade in Update — the shop screen's buy button @ shop.rs:70
+  - for each pressed buy button:
+~   - check the Score covers the price → the Purse covers the price ^can_afford @ shop.rs:78 @ api Purse::spend
+    - if it does not:
+      - shake the button and play the denied sound
+    - else:
+      - apply the upgrade to the player
+  - refresh the button labels
+
+## api
+  WaveTable — the per-wave numbers the director reads @ wave_table.rs
+-   fn score_value(wave: u32) -> u32 @ wave_table.rs:20
++   fn bounty(wave: u32) -> u32 @ wave_table.rs:20
++   fn bonus(wave: u32) -> u32 @ wave_table.rs:31
++ Purse — the coins the player holds this run @ purse.rs
++   fn credit(coins: u32) @ purse.rs:14
++   fn Purse::spend(cost: u32) -> Result<u32, NotEnough> @ purse.rs:22
+  Score — the run's score display @ score.rs
+-   fn spend(cost: u32) -> bool @ score.rs:40
+
+## tests
++ tests 4 — bounty per wave, the early flag, bonus only when early, one clear per wave @ waves_test.rs:12 @ guards ^bounty_from_table, ^early_clear, ^bonus_only_early
++ test bonus_paid_on_early_clear — clearing before the timer credits the wave bonus @ waves_test.rs:80 @ guards ^wave_bonus
++ tests 2 — a dead enemy credits its bounty once, even when two hits land in one frame @ bounty_test.rs:8 @ guards ^paid_once
++ test purse_refuses_overspend — a price above the coins leaves the purse untouched @ purse_test.rs:10 @ guards ^can_afford
+- tests 3 — score spending in the shop; the score is no longer spent @ shop_test.rs:30
+~ test shop_buys_upgrade — with score → with coins @ shop_test.rs:60
+
+---
+
+(source_file
+  (header_line
+    (header_key)
+    (header_value))
+  (header_line
+    (header_key)
+    (header_value))
+  (header_line
+    (header_key)
+    (header_value))
+  (header_line
+    (header_key)
+    (header_value))
+  (header_line
+    (header_key)
+    (header_value))
+  (intent_section
+    (section_header
+      (section_name))
+    (context_line
+      (gutter_context)
+      (step
+        (bullet)
+        (prose)))
+    (context_line
+      (gutter_context)
+      (step
+        (bullet)
+        (prose))))
+  (data_section
+    (section_header
+      (section_name))
+    (context_line
+      (gutter_context)
+      (type_definition
+        (ecs_role)
+        (type_name)))
+    (context_line
+      (gutter_context)
+      (member_line
+        (member
+          (field_name)
+          (type
+            (type_name)))))
+    (removed_line
+      (gutter_removed)
+      (member_line
+        (member
+          (field_name)
+          (type
+            (type_name)))))
+    (added_line
+      (gutter_added)
+      (member_line
+        (member
+          (field_name)
+          (type
+            (type_name)))))
+    (context_line
+      (gutter_context)
+      (member_line
+        (member
+          (field_name)
+          (type
+            (type_name)))))
+    (context_line
+      (gutter_context))
+    (added_line
+      (gutter_added)
+      (type_definition
+        (ecs_role)
+        (type_name)
+        (member
+          (field_name)
+          (type
+            (type_name)))
+        (member
+          (field_name)
+          (type
+            (type_name)))
+        (member
+          (field_name)
+          (type
+            (type_name)))))
+    (added_line
+      (gutter_added)
+      (type_definition
+        (ecs_role)
+        (type_name)
+        (member
+          (field_name)
+          (type
+            (type_name)))
+        (member
+          (field_name)
+          (type
+            (type_name)))))
+    (context_line
+      (gutter_context)
+      (type_definition
+        (ecs_role)
+        (type_name)))
+    (context_line
+      (gutter_context)
+      (member_line
+        (member
+          (field_name)
+          (type
+            (type_name)))))
+    (added_line
+      (gutter_added)
+      (member_line
+        (member
+          (field_name)
+          (type
+            (type_name)))))
+    (context_line
+      (gutter_context))
+    (added_line
+      (gutter_added)
+      (type_definition
+        (ecs_role)
+        (type_name)
+        (member
+          (field_name))
+        (member
+          (field_name)))))
+  (unit_section
+    (section_header
+      (section_name)
+      (unit_name)
+      (unit_trigger
+        (trigger_keyword)
+        (trigger_target))
+      (separator)
+      (prose)
+      (diff_link
+        (path)
+        (line_number)))
+    (context_line
+      (gutter_context)
+      (step
+        (bullet)
+        (prose)))
+    (context_line
+      (gutter_context)
+      (step
+        (bullet)
+        (keyword)
+        (prose)))
+    (context_line
+      (gutter_context)
+      (step
+        (bullet)
+        (prose)))
+    (changed_line
+      (gutter_changed)
+      (step
+        (bullet)
+        (change
+          (old_text)
+          (arrow)
+          (new_text))
+        (anchor)
+        (diff_link
+          (path)
+          (line_number))
+        (api_ref
+          (api_keyword)
+          (api_target
+            (module_name)
+            (fn_name)))))
+    (context_line
+      (gutter_context)
+      (step
+        (bullet)
+        (keyword)
+        (prose)))
+    (changed_line
+      (gutter_changed)
+      (step
+        (bullet)
+        (change
+          (old_text)
+          (arrow)
+          (new_text))
+        (anchor)
+        (diff_link
+          (path)
+          (line_number))))
+    (removed_line
+      (gutter_removed)
+      (step
+        (bullet)
+        (prose)
+        (diff_link
+          (path)
+          (line_number))))
+    (removed_line
+      (gutter_removed)
+      (step
+        (bullet)
+        (prose)))
+    (added_line
+      (gutter_added)
+      (step
+        (bullet)
+        (keyword)
+        (prose)))
+    (added_line
+      (gutter_added)
+      (step
+        (bullet)
+        (prose)
+        (anchor)
+        (diff_link
+          (path)
+          (line_number))
+        (api_ref
+          (api_keyword)
+          (api_target
+            (module_name)
+            (fn_name))
+          (api_target
+            (module_name)
+            (fn_name)))))
+    (context_line
+      (gutter_context)
+      (step
+        (bullet)
+        (prose)))
+    (context_line
+      (gutter_context)
+      (invariants))
+    (context_line
+      (gutter_context)
+      (step
+        (bullet)
+        (prose)))
+    (context_line
+      (gutter_context)
+      (step
+        (bullet)
+        (prose)))
+    (added_line
+      (gutter_added)
+      (step
+        (bullet)
+        (prose)
+        (anchor))))
+  (unit_section
+    (section_header
+      (section_name)
+      (unit_name)
+      (unit_status)
+      (unit_trigger
+        (trigger_keyword)
+        (trigger_target))
+      (separator)
+      (prose)
+      (diff_link
+        (path)
+        (line_number)))
+    (added_line
+      (gutter_added)
+      (step
+        (bullet)
+        (prose)
+        (diff_link
+          (path)
+          (line_number))
+        (api_ref
+          (api_keyword)
+          (api_target
+            (module_name)
+            (fn_name)))))
+    (added_line
+      (gutter_added)
+      (step
+        (bullet)
+        (prose)
+        (anchor)
+        (diff_link
+          (path)
+          (line_number))))
+    (added_line
+      (gutter_added)
+      (invariants))
+    (added_line
+      (gutter_added)
+      (step
+        (bullet)
+        (prose)
+        (anchor))))
+  (unit_section
+    (section_header
+      (section_name)
+      (unit_name)
+      (unit_trigger
+        (trigger_keyword)
+        (trigger_target))
+      (separator)
+      (prose)
+      (diff_link
+        (path)
+        (line_number)))
+    (context_line
+      (gutter_context)
+      (step
+        (bullet)
+        (keyword)
+        (prose)))
+    (changed_line
+      (gutter_changed)
+      (step
+        (bullet)
+        (change
+          (old_text)
+          (arrow)
+          (new_text))
+        (anchor)
+        (diff_link
+          (path)
+          (line_number))
+        (api_ref
+          (api_keyword)
+          (api_target
+            (module_name)
+            (fn_name)))))
+    (context_line
+      (gutter_context)
+      (step
+        (bullet)
+        (keyword)
+        (prose)))
+    (context_line
+      (gutter_context)
+      (step
+        (bullet)
+        (prose)))
+    (context_line
+      (gutter_context)
+      (step
+        (bullet)
+        (keyword)))
+    (context_line
+      (gutter_context)
+      (step
+        (bullet)
+        (prose)))
+    (context_line
+      (gutter_context)
+      (step
+        (bullet)
+        (prose))))
+  (api_section
+    (section_header
+      (section_name))
+    (context_line
+      (gutter_context)
+      (module_line
+        (module_name)
+        (separator)
+        (prose)
+        (diff_link
+          (path))))
+    (removed_line
+      (gutter_removed)
+      (fn_entry
+        (fn_name)
+        (param
+          (param_name)
+          (type
+            (type_name)))
+        (type
+          (type_name))
+        (diff_link
+          (path)
+          (line_number))))
+    (added_line
+      (gutter_added)
+      (fn_entry
+        (fn_name)
+        (param
+          (param_name)
+          (type
+            (type_name)))
+        (type
+          (type_name))
+        (diff_link
+          (path)
+          (line_number))))
+    (added_line
+      (gutter_added)
+      (fn_entry
+        (fn_name)
+        (param
+          (param_name)
+          (type
+            (type_name)))
+        (type
+          (type_name))
+        (diff_link
+          (path)
+          (line_number))))
+    (added_line
+      (gutter_added)
+      (module_line
+        (module_name)
+        (separator)
+        (prose)
+        (diff_link
+          (path))))
+    (added_line
+      (gutter_added)
+      (fn_entry
+        (fn_name)
+        (param
+          (param_name)
+          (type
+            (type_name)))
+        (diff_link
+          (path)
+          (line_number))))
+    (added_line
+      (gutter_added)
+      (fn_entry
+        (type_name)
+        (fn_name)
+        (param
+          (param_name)
+          (type
+            (type_name)))
+        (type
+          (type_name)
+          (type
+            (type_name))
+          (type
+            (type_name)))
+        (diff_link
+          (path)
+          (line_number))))
+    (context_line
+      (gutter_context)
+      (module_line
+        (module_name)
+        (separator)
+        (prose)
+        (diff_link
+          (path))))
+    (removed_line
+      (gutter_removed)
+      (fn_entry
+        (fn_name)
+        (param
+          (param_name)
+          (type
+            (type_name)))
+        (type
+          (type_name))
+        (diff_link
+          (path)
+          (line_number)))))
+  (tests_section
+    (section_header
+      (section_name))
+    (added_line
+      (gutter_added)
+      (test_group
+        (test_count)
+        (separator)
+        (prose)
+        (diff_link
+          (path)
+          (line_number))
+        (guards
+          (guards_keyword)
+          (anchor)
+          (anchor)
+          (anchor))))
+    (added_line
+      (gutter_added)
+      (test_entry
+        (test_name)
+        (separator)
+        (prose)
+        (diff_link
+          (path)
+          (line_number))
+        (guards
+          (guards_keyword)
+          (anchor))))
+    (added_line
+      (gutter_added)
+      (test_group
+        (test_count)
+        (separator)
+        (prose)
+        (diff_link
+          (path)
+          (line_number))
+        (guards
+          (guards_keyword)
+          (anchor))))
+    (added_line
+      (gutter_added)
+      (test_entry
+        (test_name)
+        (separator)
+        (prose)
+        (diff_link
+          (path)
+          (line_number))
+        (guards
+          (guards_keyword)
+          (anchor))))
+    (removed_line
+      (gutter_removed)
+      (test_group
+        (test_count)
+        (separator)
+        (prose)
+        (diff_link
+          (path)
+          (line_number))))
+    (changed_line
+      (gutter_changed)
+      (test_entry
+        (test_name)
+        (separator)
+        (change
+          (old_text)
+          (arrow)
+          (new_text))
+        (diff_link
+          (path)
+          (line_number))))))
