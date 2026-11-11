@@ -15,9 +15,9 @@
     }
   ],
   "metadata": {
-    "version": "0.1.0",
+    "version": "3.0.0",
     "license": "MIT",
-    "description": "MML (Mental Model Language) grammar for tree-sitter",
+    "description": "HMML (the hobby Mental Model Language) grammar for tree-sitter",
     "authors": [
       {
         "name": "Julian Bieber"

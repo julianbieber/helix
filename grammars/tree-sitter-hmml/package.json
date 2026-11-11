@@ -1,7 +1,7 @@
 {
   "name": "tree-sitter-hmml",
-  "version": "0.1.0",
-  "description": "MML (Mental Model Language) grammar for tree-sitter (syntax highlighting)",
+  "version": "3.0.0",
+  "description": "HMML (the hobby Mental Model Language) grammar for tree-sitter (syntax highlighting)",
   "repository": "https://github.com/julianbieber/helix",
   "license": "MIT",
   "tree-sitter": [

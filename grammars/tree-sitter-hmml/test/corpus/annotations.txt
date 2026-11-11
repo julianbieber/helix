@@ -1,0 +1,131 @@
+====================
+all four annotations
+====================
+
+## unit u — a unit
++ - credit the bounty ^credit @ waves.rs:102 @ api WaveTable::find
+
+## tests
++ tests 3 — a heading @ waves_test.rs:40 @ guards ^credit, ^other
+
+---
+
+(source_file
+  (unit_section
+    (section_header
+      (section_name)
+      (unit_name)
+      (separator)
+      (prose))
+    (added_line
+      (gutter_added)
+      (step
+        (bullet)
+        (prose)
+        (anchor)
+        (diff_link
+          (path)
+          (line_number))
+        (api_ref
+          (api_keyword)
+          (api_target
+            (module_name)
+            (fn_name))))))
+  (tests_section
+    (section_header
+      (section_name))
+    (added_line
+      (gutter_added)
+      (test_group
+        (test_count)
+        (separator)
+        (prose)
+        (diff_link
+          (path)
+          (line_number))
+        (guards
+          (guards_keyword)
+          (anchor)
+          (anchor))))))
+
+======================
+api ref through a type
+======================
+
+## unit u — a unit
+  - add it @ purse.rs @ api Shop::Shop::add
+
+---
+
+(source_file
+  (unit_section
+    (section_header
+      (section_name)
+      (unit_name)
+      (separator)
+      (prose))
+    (context_line
+      (gutter_context)
+      (step
+        (bullet)
+        (prose)
+        (diff_link
+          (path))
+        (api_ref
+          (api_keyword)
+          (api_target
+            (module_name)
+            (fn_name)
+            (fn_name)))))))
+
+============================
+lone at and caret stay prose
+============================
+
+## intent
+  - mail a@b about x ^ y
+
+---
+
+(source_file
+  (intent_section
+    (section_header
+      (section_name))
+    (context_line
+      (gutter_context)
+      (step
+        (bullet)
+        (prose)))))
+
+================================================================================
+api ref with several targets
+================================================================================
+
+## unit u — the unit
++ - go @ f.rs:1 @ api Mod::go, Other::run
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (unit_section
+    (section_header
+      (section_name)
+      (unit_name)
+      (separator)
+      (prose))
+    (added_line
+      (gutter_added)
+      (step
+        (bullet)
+        (prose)
+        (diff_link
+          (path)
+          (line_number))
+        (api_ref
+          (api_keyword)
+          (api_target
+            (module_name)
+            (fn_name))
+          (api_target
+            (module_name)
+            (fn_name)))))))

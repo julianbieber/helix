@@ -1,0 +1,92 @@
+==============
+intent section
+==============
+
+## intent
+  - every enemy killed pays its bounty into the purse
+  - a second bullet
+
+---
+
+(source_file
+  (intent_section
+    (section_header
+      (section_name))
+    (context_line
+      (gutter_context)
+      (step
+        (bullet)
+        (prose)))
+    (context_line
+      (gutter_context)
+      (step
+        (bullet)
+        (prose)))))
+
+=====================================
+unit header with status and diff link
+=====================================
+
+## unit pay-bounty (new) — pays an enemy's bounty @ bounty.rs:22
++ - find the fence
+
+---
+
+(source_file
+  (unit_section
+    (section_header
+      (section_name)
+      (unit_name)
+      (unit_status)
+      (separator)
+      (prose)
+      (diff_link
+        (path)
+        (line_number)))
+    (added_line
+      (gutter_added)
+      (step
+        (bullet)
+        (prose)))))
+
+================================
+unit header removed without link
+================================
+
+## unit old-flow (removed) — the old flow
+- - do it
+
+---
+
+(source_file
+  (unit_section
+    (section_header
+      (section_name)
+      (unit_name)
+      (unit_status)
+      (separator)
+      (prose))
+    (removed_line
+      (gutter_removed)
+      (step
+        (bullet)
+        (prose)))))
+
+===============
+unknown section
+===============
+
+## modules
+  - still highlighted
+
+---
+
+(source_file
+  (other_section
+    (section_header
+      (section_name))
+    (context_line
+      (gutter_context)
+      (step
+        (bullet)
+        (prose)))))

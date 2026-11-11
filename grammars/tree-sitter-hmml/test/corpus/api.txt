@@ -1,0 +1,116 @@
+=====================
+module and fn entries
+=====================
+
+## api
+  Purse — the coins the player holds this run @ waves.rs
++   fn project(result: Wave, picks: Option<Vec<Pick>>) -> Either<String, Wave> @ waves.rs:212
++   fn put(result: Bounty) @ wave_table.rs:72
++   fn Shop::add(upgrade: Upgrade) -> Either<String, String> @ purse.rs:31
+
+---
+
+(source_file
+  (api_section
+    (section_header
+      (section_name))
+    (context_line
+      (gutter_context)
+      (module_line
+        (module_name)
+        (separator)
+        (prose)
+        (diff_link
+          (path))))
+    (added_line
+      (gutter_added)
+      (fn_entry
+        (fn_name)
+        (param
+          (param_name)
+          (type
+            (type_name)))
+        (param
+          (param_name)
+          (type
+            (type_name)
+            (type
+              (type_name)
+              (type
+                (type_name)))))
+        (type
+          (type_name)
+          (type
+            (type_name))
+          (type
+            (type_name)))
+        (diff_link
+          (path)
+          (line_number))))
+    (added_line
+      (gutter_added)
+      (fn_entry
+        (fn_name)
+        (param
+          (param_name)
+          (type
+            (type_name)))
+        (diff_link
+          (path)
+          (line_number))))
+    (added_line
+      (gutter_added)
+      (fn_entry
+        (type_name)
+        (fn_name)
+        (param
+          (param_name)
+          (type
+            (type_name)))
+        (type
+          (type_name)
+          (type
+            (type_name))
+          (type
+            (type_name)))
+        (diff_link
+          (path)
+          (line_number))))))
+
+====================
+changed fn signature
+====================
+
+## api
+  Store — the store
+~   fn find(id: String) -> Option<A> → Option<B> @ store.rs:3
+
+---
+
+(source_file
+  (api_section
+    (section_header
+      (section_name))
+    (context_line
+      (gutter_context)
+      (module_line
+        (module_name)
+        (separator)
+        (prose)))
+    (changed_line
+      (gutter_changed)
+      (fn_entry
+        (fn_name)
+        (param
+          (param_name)
+          (type
+            (type_name)))
+        (type
+          (type_name)
+          (type
+            (type_name)))
+        (arrow)
+        (new_text)
+        (diff_link
+          (path)
+          (line_number))))))

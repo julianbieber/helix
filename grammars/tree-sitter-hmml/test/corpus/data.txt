@@ -1,0 +1,178 @@
+============
+struct block
+============
+
+## data
+  struct SpawnCall {
+-   data: String,
++   bounty: String,
++   columns: Option<Vec<Pick>>,
+    wave_kind: String,
+  }
+
+---
+
+(source_file
+  (data_section
+    (section_header
+      (section_name))
+    (context_line
+      (gutter_context)
+      (type_definition
+        (type_name)))
+    (removed_line
+      (gutter_removed)
+      (member_line
+        (member
+          (field_name)
+          (type
+            (type_name)))))
+    (added_line
+      (gutter_added)
+      (member_line
+        (member
+          (field_name)
+          (type
+            (type_name)))))
+    (added_line
+      (gutter_added)
+      (member_line
+        (member
+          (field_name)
+          (type
+            (type_name)
+            (type
+              (type_name)
+              (type
+                (type_name)))))))
+    (context_line
+      (gutter_context)
+      (member_line
+        (member
+          (field_name)
+          (type
+            (type_name)))))
+    (context_line
+      (gutter_context))))
+
+========================
+one-line struct and enum
+========================
+
+## data
++ struct Bounty { bounty: String, spawn_rule: String, result: Wave }
++ enum Freshness { fresh, stale }
+
+---
+
+(source_file
+  (data_section
+    (section_header
+      (section_name))
+    (added_line
+      (gutter_added)
+      (type_definition
+        (type_name)
+        (member
+          (field_name)
+          (type
+            (type_name)))
+        (member
+          (field_name)
+          (type
+            (type_name)))
+        (member
+          (field_name)
+          (type
+            (type_name)))))
+    (added_line
+      (gutter_added)
+      (type_definition
+        (type_name)
+        (member
+          (field_name))
+        (member
+          (field_name))))))
+
+============================
+enum block and changed field
+============================
+
+## data
+  enum Mode {
++   fast,
+  }
+  struct S {
+~   data: String → Vec<String>
+  }
+
+---
+
+(source_file
+  (data_section
+    (section_header
+      (section_name))
+    (context_line
+      (gutter_context)
+      (type_definition
+        (type_name)))
+    (added_line
+      (gutter_added)
+      (member_line
+        (member
+          (field_name))))
+    (context_line
+      (gutter_context))
+    (context_line
+      (gutter_context)
+      (type_definition
+        (type_name)))
+    (changed_line
+      (gutter_changed)
+      (member_line
+        (member
+          (field_name)
+          (type
+            (type_name)))
+        (arrow)
+        (new_text)))
+    (context_line
+      (gutter_context))))
+
+===============
+container types
+===============
+
+## data
++ struct T { m: Map<String, Vec<i32>>, f: Future<Either<String, Uuid>> }
+
+---
+
+(source_file
+  (data_section
+    (section_header
+      (section_name))
+    (added_line
+      (gutter_added)
+      (type_definition
+        (type_name)
+        (member
+          (field_name)
+          (type
+            (type_name)
+            (type
+              (type_name))
+            (type
+              (type_name)
+              (type
+                (type_name)))))
+        (member
+          (field_name)
+          (type
+            (type_name)
+            (type
+              (type_name)
+              (type
+                (type_name))
+              (type
+                (type_name)))))))))

@@ -1,0 +1,112 @@
+=====================
+control flow keywords
+=====================
+
+## unit u — a unit
+  - if no queries:
+    - answer an error
+  - else:
+    - for each enemy in the wave:
+      - while it runs:
+        - try:
+          - run it
+        - on error e:
+          - log e
+
+---
+
+(source_file
+  (unit_section
+    (section_header
+      (section_name)
+      (unit_name)
+      (separator)
+      (prose))
+    (context_line
+      (gutter_context)
+      (step
+        (bullet)
+        (keyword)
+        (prose)))
+    (context_line
+      (gutter_context)
+      (step
+        (bullet)
+        (prose)))
+    (context_line
+      (gutter_context)
+      (step
+        (bullet)
+        (keyword)))
+    (context_line
+      (gutter_context)
+      (step
+        (bullet)
+        (keyword)
+        (prose)))
+    (context_line
+      (gutter_context)
+      (step
+        (bullet)
+        (keyword)
+        (prose)))
+    (context_line
+      (gutter_context)
+      (step
+        (bullet)
+        (keyword)))
+    (context_line
+      (gutter_context)
+      (step
+        (bullet)
+        (prose)))
+    (context_line
+      (gutter_context)
+      (step
+        (bullet)
+        (keyword)
+        (prose)))
+    (context_line
+      (gutter_context)
+      (step
+        (bullet)
+        (prose)))))
+
+==========
+invariants
+==========
+
+## unit u — a unit
+  - a step
+  invariants:
+  - at most X at once
++ - only an early clear pays a bonus ^early_bonus
+
+---
+
+(source_file
+  (unit_section
+    (section_header
+      (section_name)
+      (unit_name)
+      (separator)
+      (prose))
+    (context_line
+      (gutter_context)
+      (step
+        (bullet)
+        (prose)))
+    (context_line
+      (gutter_context)
+      (invariants))
+    (context_line
+      (gutter_context)
+      (step
+        (bullet)
+        (prose)))
+    (added_line
+      (gutter_added)
+      (step
+        (bullet)
+        (prose)
+        (anchor)))))

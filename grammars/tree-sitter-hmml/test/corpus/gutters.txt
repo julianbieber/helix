@@ -1,0 +1,42 @@
+===================
+one line per gutter
+===================
+
+## unit u — a unit
+  - context
++ - added
+- - removed
+~ - old wording → new wording
+
+---
+
+(source_file
+  (unit_section
+    (section_header
+      (section_name)
+      (unit_name)
+      (separator)
+      (prose))
+    (context_line
+      (gutter_context)
+      (step
+        (bullet)
+        (prose)))
+    (added_line
+      (gutter_added)
+      (step
+        (bullet)
+        (prose)))
+    (removed_line
+      (gutter_removed)
+      (step
+        (bullet)
+        (prose)))
+    (changed_line
+      (gutter_changed)
+      (step
+        (bullet)
+        (change
+          (old_text)
+          (arrow)
+          (new_text))))))

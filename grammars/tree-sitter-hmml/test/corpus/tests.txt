@@ -1,0 +1,51 @@
+====================
+test and tests lines
+====================
+
+## tests
++ test overspend_refused — a price above the coins is refused @ purse_test.rs:40 @ guards ^unknown_result
+- tests 9 — selfContainedSpecError cases; the function is gone @ shop_test.rs:72
+~ test buys_an_upgrade — with score → with coins @ shop_test.rs:52 @ guards ^queue_spawn
+
+---
+
+(source_file
+  (tests_section
+    (section_header
+      (section_name))
+    (added_line
+      (gutter_added)
+      (test_entry
+        (test_name)
+        (separator)
+        (prose)
+        (diff_link
+          (path)
+          (line_number))
+        (guards
+          (guards_keyword)
+          (anchor))))
+    (removed_line
+      (gutter_removed)
+      (test_group
+        (test_count)
+        (separator)
+        (prose)
+        (diff_link
+          (path)
+          (line_number))))
+    (changed_line
+      (gutter_changed)
+      (test_entry
+        (test_name)
+        (separator)
+        (change
+          (old_text)
+          (arrow)
+          (new_text))
+        (diff_link
+          (path)
+          (line_number))
+        (guards
+          (guards_keyword)
+          (anchor))))))
